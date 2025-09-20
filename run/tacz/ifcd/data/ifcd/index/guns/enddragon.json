@@ -1,0 +1,9 @@
+{
+    "name": "ifcdenddragon.name",
+    "tooltip":"ifcdenddragon.tooltip",
+    "display": "ifcd:enddragon_display",
+    "data": "ifcd:enddragon_data",
+    "type": "rifle",
+    "item_type": "modern_kinetic",
+    "sort": 10
+}

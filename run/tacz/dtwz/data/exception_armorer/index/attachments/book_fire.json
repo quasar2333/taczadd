@@ -1,0 +1,6 @@
+{
+  "name": "exception_armorer.attachment.book_fire.name",
+  "display": "exception_armorer:book_fire_display",
+  "data": "exception_armorer:book_fire_data",
+  "type": "muzzle"
+}

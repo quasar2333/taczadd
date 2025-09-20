@@ -1,0 +1,22 @@
+{
+  "materials": [
+    {
+      "item": {
+        "tag": "forge:ingots/iron"
+      },
+      "count": 1
+    },
+    {
+      "item": {
+        "item": "minecraft:coal"
+      },
+      "count": 1
+    }
+  ],
+  "result": {
+    "type": "ammo",
+    "id": "exception_armorer:arrow",
+    "count": 16
+  },
+  "type": "tacz:gun_smith_table_crafting"
+}

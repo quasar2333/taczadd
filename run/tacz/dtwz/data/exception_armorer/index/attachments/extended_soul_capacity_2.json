@@ -1,0 +1,7 @@
+{
+  "name": "exception_armorer.attachment.extended_soul_capacity_2.name",
+  "display": "exception_armorer:extended_soul_capacity_2_display",
+  "data": "exception_armorer:extended_soul_capacity_2_data",
+  "type": "extended_mag",
+  "sort": 81
+}

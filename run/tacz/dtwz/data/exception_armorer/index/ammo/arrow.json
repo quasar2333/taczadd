@@ -1,0 +1,6 @@
+{
+  "name": "exception_armorer.ammo.arrow.name",
+  "display": "exception_armorer:arrow_display",
+  "tooltip": "exception_armorer.arrow.desc",
+  "stack_size": 64
+}

@@ -1,0 +1,7 @@
+{
+  "slot": "exception_armorer:attachment/slot/extended_soul_capacity_3",
+  "sounds": {
+    "install": "exception_armorer:misc/capa_on",
+    "uninstall": "exception_armorer:misc/capa_off"
+  }
+}

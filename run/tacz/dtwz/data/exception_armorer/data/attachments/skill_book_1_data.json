@@ -1,0 +1,11 @@
+{
+  "rpm": {
+    "addend": -1110
+  },
+  "damage":{
+    "multiplier": 0.8
+  },
+  "effective_range": {
+    "multiplier": 1.25
+  }
+}

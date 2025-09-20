@@ -1,0 +1,5 @@
+{
+  "name": "exception_armorer.ammo.soul_battery.name",
+  "display": "exception_armorer:soul_battery_display",
+  "stack_size": 64
+}

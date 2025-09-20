@@ -1,0 +1,116 @@
+{
+  "apotheosis_modern_ragnarok": {
+    "enchantment_value": 15,
+    "force_melee_weapon": 1,
+    "is_heavy_melee_weapon": true,
+    "loot_category_override": "heavy_weapon",
+    "disabled_affixes": [
+      "apotheosis_modern_ragnarok:all_gun/attribute/lightweight"
+    ],
+    "disabled_enchantments": [
+      "apotheosis_modern_ragnarok:projection_magic"
+    ]
+  },
+  "ammo": "exception_armorer:soul_battery",
+  "ammo_amount": 4,
+  "extended_mag_ammo_amount": [
+    7,
+    10,
+    13
+  ],
+  "script": "exception_armorer:sickle_mk1_logic",
+  "script_param": {
+    "reload_cooldown_empty": 2.75,
+    "reload_cooldown_tactical": 2.2,
+    "reload_feed_empty": 0.83,
+    "reload_feed_tactical": 0.97,
+    "reload_attack_empty": 1.9
+  },
+  "can_crawl": true,
+  "can_slide": false,
+  "bolt": "open_bolt",
+  "rpm": 100,
+  "bullet": {
+    "life": 0.1,
+    "bullet_amount": 10,
+    "damage": 20,
+    "extra_damage": {
+      "armor_ignore": 0.15,
+      "head_shot_multiplier": 1,
+      "damage_adjust": [
+        {"distance": 10, "damage": 20},
+        {"distance": "infinite", "damage": 0}
+      ]
+    },
+    "speed": 60,
+    "gravity": 0,
+    "knockback": 0.1,
+    "friction": 0,
+    "ignite_entity_time": 11,
+    "pierce": 99
+  },
+  "fire_sound": {
+    "fire_multiplier": 0.1,
+    "silence_multiplier": 0.1
+  },
+  "reload": {
+    "type": "fuel",
+    "feed": {
+      "empty": 0.97,
+      "tactical": 0.25
+    },
+    "cooldown": {
+      "empty": 3,
+      "tactical": 0.5
+    }
+  },
+  "draw_time": 0.8,
+  "put_away_time": 0,
+  "aim_time": 0,
+  "sprint_time": 0,
+  "weight": 3.6,
+  "movement_speed": {
+    "base": 0.0,
+    "aim": 0.0,
+    "reload": 0.0
+  },
+  "fire_mode": [
+    "semi",
+    "auto"
+  ],
+  "fire_mode_adjust": {
+    "auto": {
+      "damage": -2.5,
+      "rpm": 30,
+      "speed": 0,
+      "knockback": 0,
+      "armor_ignore": 0,
+      "head_shot_multiplier": 0,
+      "aim_inaccuracy": 0,
+      "other_inaccuracy": 0
+    }
+  },
+  "crawl_recoil_multiplier": 0.5,
+  "recoil": {
+    "pitch": [
+      {"time": 0, "value": [0, 0]},
+      {"time": 0.2, "value": [0, 0]}
+    ],
+    "yaw": [
+      {"time": 0, "value": [0, 0]},
+      {"time": 0.2, "value": [0, 0]}
+    ]
+  },
+  "hurt_bob_tweak_multiplier": 0,
+  "inaccuracy": {
+    "stand": 0,
+    "move": 0,
+    "sneak": 0,
+    "lie": 0,
+    "aim": 0
+  },
+  "allow_attachment_types": [
+    "muzzle",
+    "extended_mag"
+  ]
+}

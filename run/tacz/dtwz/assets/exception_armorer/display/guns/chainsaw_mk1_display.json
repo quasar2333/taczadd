@@ -1,0 +1,47 @@
+{
+  "show_crosshair": "true",
+  "model": "exception_armorer:gun/chainsaw_mk1_geo",
+  "texture": "exception_armorer:gun/uv/chainsaw_mk1",
+  "lod": {
+    "model": "exception_armorer:gun/lod/chainsaw_mk1_lod",
+    "texture": "exception_armorer:gun/lod/chainsaw_mk1"
+  },
+  "hud": "exception_armorer:gun/hud/chainsaw_mk1",
+  "slot": "exception_armorer:gun/slot/chainsaw_mk1",
+  "animation": "exception_armorer:chainsaw_mk1",
+  "use_default_animation": "rifle",
+  "damage_style": "total",
+  "third_person_animation": "default",
+  "iron_zoom": 1,
+  "ammo_count_style": "percent",
+  "state_machine": "exception_armorer:chainsaw_mk1_state_machine",
+  "transform": {
+    "scale": {
+      "thirdperson": [0.6, 0.6, 0.6],
+      "ground": [0.6, 0.6, 0.6],
+      "fixed": [1.2, 1.2, 1.2]
+    }
+  },
+  "sounds": {
+    "dry_fire": "exception_armorer:misc/empty",
+    "fire_select": "exception_armorer:misc/empty",
+    "flesh_hit": "exception_armorer:misc/empty",
+    "kill": "exception_armorer:misc/saw_kill",
+    "draw": "exception_armorer:chainsaw_mk1/draw",
+    "shoot_3p": "exception_armorer:chainsaw_mk1/shoot_3p",
+    "melee_push": "exception_armorer:misc/empty",
+    "head_hit": "exception_armorer:misc/empty"
+  },
+  "offhand_show": {
+    "pos": [1, 19, 4],
+    "rotate": [0, 0, 50],
+    "scale": [0.5, 0.5, 0.5]
+  },
+  "hotbar_show": {
+    "0": {
+      "pos": [-1, 19, 3],
+      "rotate": [-180, 0, 130],
+      "scale": [0.5, 0.5, 0.5]
+    }
+  }
+}

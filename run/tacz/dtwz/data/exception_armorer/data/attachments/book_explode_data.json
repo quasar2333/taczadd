@@ -1,0 +1,12 @@
+{
+  "explosion": {
+    "explode": true,
+    "radius": {
+      "multiplier": 0.5
+    },
+    "damage": {
+      "multiplier": 0
+    },
+    "destroy_block": true
+  }
+}

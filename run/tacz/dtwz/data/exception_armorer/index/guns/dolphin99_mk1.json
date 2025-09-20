@@ -1,0 +1,8 @@
+{
+  "name": "exception_armorer.gun.dolphin99_mk1.name",
+  "display": "exception_armorer:dolphin99_mk1_display",
+  "data": "exception_armorer:dolphin99_mk1_data",
+  "tooltip": "exception_armorer.gun.dolphin99_mk1.desc",
+  "type": "rifle",
+  "sort": 83
+}

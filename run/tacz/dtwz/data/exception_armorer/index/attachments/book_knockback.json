@@ -1,0 +1,6 @@
+{
+  "name": "exception_armorer.attachment.book_knockback.name",
+  "display": "exception_armorer:book_knockback_display",
+  "data": "exception_armorer:book_knockback_data",
+  "type": "muzzle"
+}

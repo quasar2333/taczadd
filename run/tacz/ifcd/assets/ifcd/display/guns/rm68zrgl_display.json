@@ -1,0 +1,60 @@
+{
+    // ʹ�����Ƿ����ģ���ļ���models/gun/ak47_geo.json��ע�⣬����Ҫ�����ļ���׺��Ҳ��Ҫ������ͷ�� "models/"��
+    "model": "ifcd:gun/rm68zrgl_geo",
+    // ʹ�����Ƿ����ģ����ͼ��textures/gun/uv/ak47.png��ע�⣬����Ҫ�����ļ���׺��Ҳ��Ҫ������ͷ�� "textures/"��
+    "texture": "ifcd:gun/uv/rm68zrgl",
+    // ʹ�����Ƿ���ı��� 2D ��ͼ��textures/gun/slot/ak47.png��ע�⣬����Ҫ�����ļ���׺��Ҳ��Ҫ������ͷ�� "textures/"��
+    "slot": "ifcd:gun/slot/rm68zrgl",
+    // �����˳Ƴ�ǹ������ֱ������default
+    "third_person_animation": "default",
+    // GUI/HUD ����� 2D ���ʣ��ڰ�Ŀ¼�µ� textures �ļ�����Ѱ�ң���Ϊ�գ���Ϊ�գ����Ӧλ�ò�����Ⱦ
+  "hud": "ifcd:gun/hud/rm68zrgl",
+    // ���õĶ����������ڰ�Ŀ¼�µ� animations �ļ�����Ѱ�ң�������Ϊ��
+  "animation": "ifcd:rm68zrgl",
+  // ָ��ʹ��ȱʡ��������Ϊ�ա��������ָ���Ķ����ļ���ȱ��ĳ���������� draw ����������ȱʡ����������
+  // ֵ��Ϊ rifle��pistol
+  "use_default_animation": "rifle",
+    "sounds": {
+    "draw": "tacz:qbz_95/qbz_95_draw",
+    "put_away": "tacz:qbz_95/qbz_95_put_away",
+    "shoot": "ifcd:rm68zrgl/rm68zrgl_shoot",
+    "shoot_3p": "tacz:qbz_95/qbz_95_shoot_3p",
+    "silence": "tacz:qbz_95/qbz_95_silence",
+    "silence_3p": "tacz:qbz_95/qbz_95_silence_3p",
+    "dry_fire": "tacz:dry_fire",
+    "fire_select": "tacz:fire_select",
+    "head_hit": "tacz:head_hit",
+    "flesh_hit": "tacz:flesh_hit",
+    "kill": "tacz:kill",
+    "melee_push": "tacz:melee_stock/melee_stock_01",
+    "melee_stock": "tacz:melee_stock/melee_stock_03"
+  },
+    "muzzle_flash": {
+    "texture": "tacz:flash/common_muzzle_flash",
+    "scale": 1
+  },
+  // �ӵ������Ⱦ������ammo display ��Ҳ�У����ǻᱻ����Ĳ������ǵ�
+  "ammo": {
+    // ҷ�ⵯ��ɫ��û����Ϊ #FFFFFF��û�д��ֶ�ʱ������� ammo ������ֶ�
+    // �ϸ���ѭ RGB ��ɫ����
+    "tracer_color": "#FF8888"
+    // ����Ч�������ֲ�����ԭ��ָ����ȫһ�£�����ɲο� wiki��https://minecraft.fandom.com/zh/wiki/%E5%91%BD%E4%BB%A4/particle
+    // û�д��ֶ�ʱ������� ammo ������ֶ�
+    //    "particle": {
+    //      // ���ƣ������ѡ���ӿɲο� wiki��https://minecraft.fandom.com/zh/wiki/%E7%B2%92%E5%AD%90
+    //      "name": "campfire_signal_smoke",
+    //      // ���ɵ�����Ĭ��Ϊ 0 0 0
+    //      "delta": [
+    //        0,
+    //        0,
+    //        0
+    //      ],
+    //      // �ٶȣ�Ĭ��Ϊ0����������Ϊ 0
+    //      "speed": 0,
+    //      // ���Ӵ���ʱ�䣬��λ tick��Ĭ��Ϊ 20 tick
+    //      "life_time": 50,
+    //      // �������������ӵ��ٶȹ���ʱ������������������ܹ������ӵ�·���Ŀ�϶
+    //      "count": 5
+    //    }
+  }
+}

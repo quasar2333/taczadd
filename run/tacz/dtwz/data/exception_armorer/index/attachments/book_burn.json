@@ -1,0 +1,7 @@
+{
+  "name": "exception_armorer.attachment.book_burn.name",
+  "display": "exception_armorer:book_burn_display",
+  "tooltip": "exception_armorer.book_burn.desc",
+  "data": "exception_armorer:book_burn_data",
+  "type": "muzzle"
+}

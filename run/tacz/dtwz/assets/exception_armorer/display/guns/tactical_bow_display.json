@@ -1,0 +1,46 @@
+{
+  "show_crosshair": "true",
+  "model": "exception_armorer:gun/tactical_bow_geo",
+  "texture": "exception_armorer:gun/uv/tactical_bow",
+  "lod": {
+    "model": "exception_armorer:gun/lod/tactical_bow_lod",
+    "texture": "exception_armorer:gun/lod/tactical_bow"
+  },
+  "hud": "exception_armorer:gun/hud/tactical_bow",
+  "slot": "exception_armorer:gun/slot/tactical_bow",
+  "animation": "exception_armorer:tactical_bow",
+  "use_default_animation": "rifle",
+  "damage_style": "total",
+  "third_person_animation": "default",
+  "iron_zoom": 1,
+  "state_machine": "exception_armorer:tactical_bow_state_machine",
+  "transform": {
+    "scale": {
+      "thirdperson": [0.6, 0.6, 0.6],
+      "ground": [0.6, 0.6, 0.6],
+      "fixed": [1.2, 1.2, 1.2]
+    }
+  },
+  "sounds": {
+    "dry_fire": "exception_armorer:misc/empty",
+    "fire_select": "exception_armorer:misc/empty",
+    //"flesh_hit": "exception_armorer:tactical_bow/hit",
+    "draw": "exception_armorer:tactical_bow/draw",
+    "shoot_3p": "exception_armorer:tactical_bow/shoot_3p",
+    //"kill": "exception_armorer:tactical_bow/kill",
+    "melee_push": "exception_armorer:misc/empty"
+    //"head_hit": "exception_armorer:tactical_bow/head_hit"
+  },
+  "offhand_show": {
+    "pos": [1, 19, 4],
+    "rotate": [0, 0, 50],
+    "scale": [0.5, 0.5, 0.5]
+  },
+  "hotbar_show": {
+    "0": {
+      "pos": [-1, 19, 3],
+      "rotate": [-180, 0, 130],
+      "scale": [0.5, 0.5, 0.5]
+    }
+  }
+}

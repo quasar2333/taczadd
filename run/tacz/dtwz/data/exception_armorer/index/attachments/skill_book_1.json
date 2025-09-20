@@ -1,0 +1,7 @@
+{
+  "name": "exception_armorer.attachment.skill_book_1.name",
+  "tooltip": "exception_armorer.skill_book_1.desc",
+  "display": "exception_armorer:skill_book_1_display",
+  "data": "exception_armorer:skill_book_1_data",
+  "type": "muzzle"
+}

@@ -1,0 +1,31 @@
+{
+  "materials": [
+    {
+      "item": {
+        "type": "forge:partial_nbt",
+        "item": "tacz:attachment",
+        "nbt": {
+          "AttachmentId": "exception_armorer:extended_soul_capacity_2"
+        }
+      },
+      "count": 1
+    },
+    {
+      "item": {
+        "item": "minecraft:nether_wart"
+      },
+      "count": 8
+    },
+    {
+      "item": {
+        "item": "minecraft:soul_sand"
+      },
+      "count": 8
+    }
+  ],
+  "result": {
+    "type": "attachment",
+    "id": "exception_armorer:extended_soul_capacity_3"
+  },
+  "type": "tacz:gun_smith_table_crafting"
+}

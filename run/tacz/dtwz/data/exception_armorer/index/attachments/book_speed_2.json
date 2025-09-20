@@ -1,0 +1,7 @@
+{
+  "name": "exception_armorer.attachment.book_speed_2.name",
+  "tooltip": "exception_armorer.book_speed_2.desc",
+  "display": "exception_armorer:book_speed_2_display",
+  "data": "exception_armorer:book_speed_2_data",
+  "type": "muzzle"
+}

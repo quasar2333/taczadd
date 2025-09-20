@@ -1,0 +1,65 @@
+{
+  "filter": "exception_armorer:default",
+  "tabs": [
+    {
+      "id": "tacz:rpg",
+      "name": "exception_armorer.type.melee.name",
+      "icon": {
+        "item": "tacz:modern_kinetic_gun",
+        "nbt": {
+          "GunId": "exception_armorer:spear_mk1"
+        }
+      }
+    },
+    {
+      "id": "tacz:rifle",
+      "name": "exception_armorer.type.range.name",
+      "icon": {
+        "item": "tacz:modern_kinetic_gun",
+        "nbt": {
+          "GunId": "exception_armorer:pump_shotgun_mk1"
+        }
+      }
+    },
+    {
+      "id": "tacz:shotgun",
+      "name": "exception_armorer.type.staff.name",
+      "icon": {
+        "item": "tacz:modern_kinetic_gun",
+        "nbt": {
+          "GunId": "exception_armorer:inferno_staff_mk1"
+        }
+      }
+    },
+    {
+      "id": "tacz:ammo",
+      "name": "exception_armorer.type.ammo.name",
+      "icon": {
+        "item": "tacz:ammo",
+        "nbt": {
+          "AmmoId": "exception_armorer:grenade_small"
+        }
+      }
+    },
+    {
+      "id": "tacz:extended_mag",
+      "name": "exception_armorer.type.extended_mag.name",
+      "icon": {
+        "item": "tacz:attachment",
+        "nbt": {
+          "AttachmentId": "exception_armorer:extended_soul_capacity_1"
+        }
+      }
+    },
+    {
+      "id": "tacz:muzzle",
+      "name": "exception_armorer.type.muzzle.name",
+      "icon": {
+        "item": "tacz:attachment",
+        "nbt": {
+          "AttachmentId": "exception_armorer:book_dmg"
+        }
+      }
+    }
+  ]
+}

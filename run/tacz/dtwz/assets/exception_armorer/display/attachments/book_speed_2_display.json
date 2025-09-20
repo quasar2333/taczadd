@@ -1,0 +1,7 @@
+{
+  "slot": "exception_armorer:attachment/slot/book_speed_2",
+  "sounds": {
+    "install": "exception_armorer:misc/book_on",
+    "uninstall": "exception_armorer:misc/book_off"
+  }
+}

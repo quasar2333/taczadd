@@ -1,0 +1,27 @@
+# 测试翻译键生成
+
+## IFCD枪械包翻译键测试
+ak47gm -> ifcdak47gm.name
+augfly -> ifcdaugfly.name  
+enddragon -> ifcdenddragon.name
+ak117jxdf -> ifcdak117jxdf.name
+ak117jxdf_a -> ifcdak117jxdf_a.name
+ak117jxdf_b -> ifcdak117jxdf_b.name
+
+## TACZ默认枪械包翻译键测试
+glock_17 -> tacz.gun.glock_17.name
+m4a1 -> tacz.gun.m4a1.name
+m107 -> tacz.gun.m107.name
+
+## 实际枪械包中的翻译键对比
+IFCD包中实际的键:
+- ifcdak47gm.name: "§4AK47 "共鸣""
+- ifcdenddragon.name: "§5M4A1 "末影龙""
+
+TACZ包中实际的键:
+- tacz.gun.glock_17.name: "格洛克 17 手枪"
+- tacz.gun.m4a1.name: "M4A1 卡宾枪"
+- tacz.gun.m107.name: "M107 .50口径反器材步枪"
+
+## 结论
+翻译键生成逻辑正确！

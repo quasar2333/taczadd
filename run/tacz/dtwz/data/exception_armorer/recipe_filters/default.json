@@ -1,0 +1,7 @@
+{
+  "whitelist": [
+    "^exception_armorer:.*$"
+  ],
+  "blacklist": [
+  ]
+}

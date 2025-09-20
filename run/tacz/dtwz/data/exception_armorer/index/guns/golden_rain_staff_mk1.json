@@ -1,0 +1,8 @@
+{
+  "name": "exception_armorer.gun.golden_rain_staff_mk1.name",
+  "display": "exception_armorer:golden_rain_staff_mk1_display",
+  "data": "exception_armorer:golden_rain_staff_mk1_data",
+  "tooltip": "exception_armorer.gun.golden_rain_staff_mk1.desc",
+  "type": "shotgun",
+  "sort": 81
+}

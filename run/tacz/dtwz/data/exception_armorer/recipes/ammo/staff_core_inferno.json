@@ -1,0 +1,22 @@
+{
+  "materials": [
+    {
+      "item": {
+        "item": "minecraft:flint"
+      },
+      "count": 4
+    },
+    {
+      "item": {
+        "item": "minecraft:blaze_powder"
+      },
+      "count": 4
+    }
+  ],
+  "result": {
+    "type": "ammo",
+    "id": "exception_armorer:staff_core_inferno",
+    "count": 1
+  },
+  "type": "tacz:gun_smith_table_crafting"
+}

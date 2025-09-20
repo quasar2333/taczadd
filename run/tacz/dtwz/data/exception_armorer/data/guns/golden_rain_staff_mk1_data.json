@@ -1,0 +1,123 @@
+{
+  "apotheosis_modern_ragnarok": {
+    "enchantment_value": 25,
+    "force_melee_weapon": -1,
+    "loot_category_override": "apotheosis_modern_ragnarok:semi_auto",
+    "disabled_enchantments": [
+      "apotheosis_modern_ragnarok:projection_magic"
+    ]
+  },
+  "ammo": "exception_armorer:staff_core_golden_rain",
+  "ammo_amount": 2,
+  "extended_mag_ammo_amount": [
+    2,
+    2,
+    2
+  ],
+  "script": "exception_armorer:inferno_staff_mk1_logic",
+  "can_crawl": true,
+  "can_slide": false,
+  "bolt": "open_bolt",
+  "rpm": 1200,
+  "bullet": {
+    "life": 0.4,
+    "bullet_amount": 1,
+    "damage": 7,
+    "tracer_count_interval": 0,
+    "extra_damage": {
+      "armor_ignore": 0.15,
+      "head_shot_multiplier": 1,
+      "damage_adjust": [
+        {"distance": 35, "damage": 7},
+        {"distance": "infinite", "damage": 0}
+      ]
+    },
+    "speed": 50,
+    "gravity": 0,
+    "knockback": 0.1,
+    "friction": 0,
+    "ignite": {
+      "entity": false,
+      "block": false
+    },
+    "ignite_entity_time": 11,
+    "pierce": 0
+  },
+  "fire_sound": {
+    "fire_multiplier": 0.25,
+    "silence_multiplier": 0.25
+  },
+  "heat":  {
+    "max": 80,
+    "per_shot": 1,
+    "cooling_multiplier": 7,
+    "cooling_delay": 300,
+    "over_heat_time": 500,
+    "min_inaccuracy": 1,
+    "max_inaccuracy": 1,
+    "min_rpm_mod": 1,
+    "max_rpm_mod": 1
+  },
+  "reload": {
+    "type": "inventory",
+    "feed": {
+      "empty": 0.5,
+      "tactical": 0.5
+    },
+    "cooldown": {
+      "empty": 1,
+      "tactical": 1
+    }
+  },
+  "draw_time": 0.1,
+  "put_away_time": 0,
+  "aim_time": 0.15,
+  "sprint_time": 0,
+  "weight": 2.6,
+  "movement_speed": {
+    "base": 0.0,
+    "aim": -0.1,
+    "reload": -0.1
+  },
+  "fire_mode": [
+    "auto"
+  ],
+  "crawl_recoil_multiplier": 0.5,
+  "recoil": {
+    "pitch": [
+      {"time": 0, "value": [0.3, 0.3]},
+      {"time": 0.25, "value": [0.3, 0.3]},
+      {"time": 0.4, "value": [-0.02, -0.02]},
+      {"time": 0.5, "value": [0, 0]}
+    ],
+    "yaw": [
+      {"time": 0, "value": [-0.2, 0.2]},
+      {"time": 0.35, "value": [-0.2, 0.2]},
+      {"time": 0.5, "value": [0, 0]}
+    ]
+  },
+  "hurt_bob_tweak_multiplier": 0,
+  "inaccuracy": {
+    "stand": 0,
+    "move": 0,
+    "sneak": 0,
+    "lie": 0,
+    "aim": 0
+  },
+  "melee": {
+    "distance": 1,
+    "cooldown": 0.5,
+    "default": {
+      "animation_type": "melee_stock",
+      "distance": 2,
+      "range_angle": 30,
+      "cooldown": 0,
+      "damage": 4,
+      "knockback": 0.25,
+      "prep": 0.17
+    }
+  },
+  "allow_attachment_types": [
+    "muzzle"
+  ]
+}

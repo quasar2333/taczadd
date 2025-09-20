@@ -1,0 +1,36 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "A": {
+      "type": "forge:partial_nbt",
+      "item": "tacz:ammo",
+      "nbt": {
+        "AmmoId": "exception_armorer:mechanical_skull"
+      }
+    },
+    "1": {
+      "tag": "forge:storage_blocks/iron"
+    },
+    "0": {
+      "tag": "forge:storage_blocks/copper"
+    },
+    "2": {
+      "tag": "forge:dusts/redstone"
+    },
+    "3": {
+      "tag": "forge:ingots/iron"
+    }
+  },
+  "pattern": [
+    " A ",
+    "202",
+    "313"
+  ],
+  "result": {
+    "item": "tacz:workbench_a",
+    "nbt": {
+      "BlockId": "exception_armorer:weapon_workbench"
+    },
+    "count": 1
+  }
+}

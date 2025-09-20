@@ -1,0 +1,26 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "1": {
+      "tag": "forge:ingots/iron"
+    },
+    "0": {
+      "item": "minecraft:skeleton_skull"
+    },
+    "2": {
+      "tag": "forge:dusts/redstone"
+    }
+  },
+  "pattern": [
+    "121",
+    "202",
+    "121"
+  ],
+  "result": {
+    "item": "tacz:ammo",
+    "nbt": {
+      "AmmoId": "exception_armorer:mechanical_skull"
+    },
+    "count": 1
+  }
+}

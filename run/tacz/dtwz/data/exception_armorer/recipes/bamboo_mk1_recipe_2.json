@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "key": {
+    "A": {
+      "item": "minecraft:sugar_cane"
+    }
+  },
+  "pattern": [
+    "A",
+    "A",
+    "A"
+  ],
+  "result": {
+    "item": "tacz:modern_kinetic_gun",
+    "nbt": {
+      "GunId": "exception_armorer:bamboo_mk1",
+      "GunCurrentAmmoCount": 1,
+      "GunFireMode": "SEMI"
+    },
+    "count": 1
+  }
+}
