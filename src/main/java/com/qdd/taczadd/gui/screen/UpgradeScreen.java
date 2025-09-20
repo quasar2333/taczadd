@@ -30,7 +30,7 @@ public class UpgradeScreen extends AbstractContainerScreen<UpgradeMenu> {
         button = new Button.Builder(Component.translatable("gui.taczadd.upgrade.button"), (p_97797_) -> {
             ModNetwork.PACKET_CHANNEL.sendToServer(new UpgradePacket());
         })
-                .pos((this.width - this.imageWidth) / 2 + 120, (this.height - this.imageHeight) / 2 + 30)
+                .pos((this.width - this.imageWidth) / 2 + 100, (this.height - this.imageHeight) / 2 + 30)
                 .size(50, 20)
                 .build();
         this.addRenderableWidget(button);
@@ -50,6 +50,7 @@ public class UpgradeScreen extends AbstractContainerScreen<UpgradeMenu> {
         renderBackground(guiGraphics);
         super.render(guiGraphics, mouseX, mouseY, delta);
         renderTooltip(guiGraphics, mouseX, mouseY);
-        guiGraphics.renderItem(this.getMenu().stack, (this.width - this.imageWidth) / 2 + 90, (this.height - this.imageHeight) / 2 + 30);
+        // 移除原有的核心物品渲染，避免在界面中央出现占位纹理（黑紫块）
+        // guiGraphics.renderItem(this.getMenu().stack, (this.width - this.imageWidth) / 2 + 90, (this.height - this.imageHeight) / 2 + 30);
     }
 }
