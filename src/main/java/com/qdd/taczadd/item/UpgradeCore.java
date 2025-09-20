@@ -48,44 +48,74 @@ public class UpgradeCore extends Item implements MenuProvider {
         // 默认TACZ枪械
         return new ResourceLocation("tacz", gunName);
     }
-    
+
     /**
      * 右键使用核心打开升级界面
      */
     @Override
     public InteractionResultHolder<ItemStack> use(Level level, Player player, InteractionHand hand) {
-        ItemStack itemstack = player.getItemInHand(hand);
+        ItemStack stack = player.getItemInHand(hand);
         if (!level.isClientSide) {
-            NetworkHooks.openScreen((ServerPlayer) player, this, 
-                friendlyByteBuf -> friendlyByteBuf.writeItem(itemstack));
+            boolean activated = isActivated(stack);
+            // 根据激活状态打开不同界面
+            MenuProvider provider = new MenuProvider() {
+                @Override
+                public Component getDisplayName() {
+                    return Component.translatable(activated ? "menu.taczadd.upgrade_core" : "menu.taczadd.activate_core", coreName);
+                }
+                @Override
+                public net.minecraft.world.inventory.AbstractContainerMenu createMenu(int id, net.minecraft.world.entity.player.Inventory inv, Player p) {
+                    if (activated) {
+                        return new com.qdd.taczadd.gui.menu.UpgradeMenu(id, inv, stack, new net.minecraft.world.inventory.SimpleContainerData(1));
+                    } else {
+                        return new com.qdd.taczadd.gui.menu.ActivationMenu(id, inv, stack, new net.minecraft.world.inventory.SimpleContainerData(1));
+                    }
+                }
+            };
+            NetworkHooks.openScreen((ServerPlayer) player, provider, buf -> buf.writeItem(stack));
         }
-        return InteractionResultHolder.success(itemstack);
+        return InteractionResultHolder.success(stack);
     }
-    
+
     /**
      * 获取前置枪械ID
      */
     public ResourceLocation getSourceGunId() {
         return sourceGunId;
     }
-    
+
     /**
      * 获取目标枪械ID
      */
     public ResourceLocation getTargetGunId() {
         return targetGunId;
     }
-    
+
     /**
      * 获取核心名称
      */
     public String getCoreName() {
         return coreName;
     }
-    
+
     /**
      * 检查是否可以升级指定的枪械（类似ReinforcedCrystal的mayPlace方法）
      */
+    private boolean isActivated(ItemStack stack) {
+        return stack.getOrCreateTag().getBoolean("activated");
+    }
+
+    @Override
+    public boolean isFoil(ItemStack stack) {
+        return isActivated(stack);
+    }
+
+    @Override
+    public Component getName(ItemStack stack) {
+        return Component.translatable(this.getDescriptionId(stack))
+                .append(!isActivated(stack) ? Component.translatable("core.unactivated") : Component.empty());
+    }
+
     public boolean mayPlace(ItemStack gunStack) {
         if (!(gunStack.getItem() instanceof AbstractGunItem gunItem)) {
             return false;
@@ -100,31 +130,37 @@ public class UpgradeCore extends Item implements MenuProvider {
     public boolean canUpgrade(ItemStack gunStack) {
         return mayPlace(gunStack);
     }
-    
+
     /**
      * 添加工具提示信息
      */
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level, List<Component> tooltip, TooltipFlag flag) {
         super.appendHoverText(stack, level, tooltip, flag);
-        
+
+        boolean activated = isActivated(stack);
         tooltip.add(Component.translatable("tooltip.taczadd.upgrade_core").withStyle(ChatFormatting.GOLD));
+        tooltip.add(Component.translatable(activated ? "tooltip.taczadd.upgrade_core.state.active" : "tooltip.taczadd.upgrade_core.state.inactive").withStyle(activated?ChatFormatting.AQUA:ChatFormatting.RED));
         tooltip.add(Component.literal(""));
-        tooltip.add(Component.translatable("tooltip.taczadd.upgrade_core.source", 
+        tooltip.add(Component.translatable("tooltip.taczadd.upgrade_core.source",
             Component.translatable("gun." + sourceGunId.getNamespace() + "." + sourceGunId.getPath()))
             .withStyle(ChatFormatting.GRAY));
-        tooltip.add(Component.translatable("tooltip.taczadd.upgrade_core.target", 
+        tooltip.add(Component.translatable("tooltip.taczadd.upgrade_core.target",
             Component.translatable("gun." + targetGunId.getNamespace() + "." + targetGunId.getPath()))
             .withStyle(ChatFormatting.GREEN));
         tooltip.add(Component.literal(""));
-        tooltip.add(Component.translatable("tooltip.taczadd.upgrade_core.usage").withStyle(ChatFormatting.YELLOW));
+        if (!activated) {
+            tooltip.add(Component.translatable("tooltip.taczadd.upgrade_core.activate_hint").withStyle(ChatFormatting.YELLOW));
+        } else {
+            tooltip.add(Component.translatable("tooltip.taczadd.upgrade_core.usage").withStyle(ChatFormatting.YELLOW));
+        }
     }
-    
+
     @Override
     public Component getDisplayName() {
         return Component.translatable("menu.taczadd.upgrade_core", coreName);
     }
-    
+
     /**
      * 获取升级提示信息（类似ReinforcedCrystal的getGuitip方法）
      */
