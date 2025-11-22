@@ -1,0 +1,7 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "taczadd:item/general_upgrade_module"
+  }
+}
+
