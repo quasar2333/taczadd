@@ -1,0 +1,18 @@
+{
+  "required": true,
+  "package": "com.qdd.taczadd.mixin",
+  "compatibilityLevel": "JAVA_17",
+  "refmap": "taczadd.refmap.json",
+  "minVersion": "0.8",
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "mixins": [
+    "mixinEntityKineticBullet",
+    "mixinGunData",
+    "mixinLivingEntityReload",
+    "mixinModernKineticGunScriptAPI"
+  ],
+  "client": [
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "lx": { "sounds": [ "taczadd:lx" ] },
+  "sl": { "sounds": [ "taczadd:sl" ] },
+  "jian": { "sounds": [ "taczadd:jian" ] },
+
+  "reinforce_success": { "sounds": [ "taczadd:reinforce_success" ] },
+  "reinforce_fail":    { "sounds": [ "taczadd:reinforce_fail" ] }
+}

@@ -1,0 +1,36 @@
+# Gradle
+.gradle/
+build/
+*/build/
+
+# Forge run dirs
+run/
+*/run/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# Compiled/temporary
+bin/
+*.log
+*.tmp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Legacy docs (kept locally only)
+CREDITS.txt
+README.txt
+POZHANZHE_SKILL_IMPLEMENTATION.md
+TaczAdd模组游玩指南.md
+
+# Audio assets kept locally
+强化失败.mp3
+强化成功.mp3
+
+# Others
+*.bak
+~$*

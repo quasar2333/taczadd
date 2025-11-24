@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "taczadd:item/battlefield_physician_gem"
+  }
+}

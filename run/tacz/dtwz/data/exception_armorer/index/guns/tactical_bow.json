@@ -1,8 +1,0 @@
-{
-  "name": "exception_armorer.gun.tactical_bow.name",
-  "display": "exception_armorer:tactical_bow_display",
-  "data": "exception_armorer:tactical_bow_data",
-  "tooltip": "exception_armorer.gun.tactical_bow.desc",
-  "type": "rifle",
-  "sort": 84
-}

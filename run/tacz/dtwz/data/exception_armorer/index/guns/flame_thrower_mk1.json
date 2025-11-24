@@ -1,8 +1,0 @@
-{
-  "name": "exception_armorer.gun.flame_thrower_mk1.name",
-  "display": "exception_armorer:flame_thrower_mk1_display",
-  "data": "exception_armorer:flame_thrower_mk1_data",
-  "tooltip": "exception_armorer.gun.flame_thrower_mk1.desc",
-  "type": "rifle",
-  "sort": 82
-}

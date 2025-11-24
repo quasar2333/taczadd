@@ -1,8 +1,0 @@
-{
-  "name": "exception_armorer.block.weapon_workbench.name",
-  "display": "exception_armorer:weapon_workbench_display",
-  "data": "exception_armorer:weapon_workbench",
-  "tooltip": "exception_armorer.block.weapon_workbench.desc",
-  "id": "tacz:workbench_a",
-  "sort": 20
-}

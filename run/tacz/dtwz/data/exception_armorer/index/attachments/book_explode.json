@@ -1,7 +1,0 @@
-{
-  "name": "exception_armorer.attachment.book_explode.name",
-  "tooltip": "exception_armorer.book_explode.desc",
-  "display": "exception_armorer:book_explode_display",
-  "data": "exception_armorer:book_explode_data",
-  "type": "muzzle"
-}

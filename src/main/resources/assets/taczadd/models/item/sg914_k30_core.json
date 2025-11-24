@@ -1,0 +1,8 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "taczadd:item/aug_pirate_core"
+  }
+}
+
+

@@ -1,9 +1,0 @@
-{
-    "name": "ifcdicedragon.name",
-    "tooltip":"ifcdicedragon.tooltip",
-    "display": "ifcd:icedragon_display",
-    "data": "ifcd:icedragon_data",
-    "type": "rifle",
-    "item_type": "modern_kinetic",
-    "sort": 10
-}

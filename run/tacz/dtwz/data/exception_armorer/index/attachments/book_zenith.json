@@ -1,7 +1,0 @@
-{
-  "name": "exception_armorer.attachment.book_zenith.name",
-  "tooltip": "exception_armorer.book_zenith.desc",
-  "display": "exception_armorer:book_zenith_display",
-  "data": "exception_armorer:book_zenith_data",
-  "type": "muzzle"
-}

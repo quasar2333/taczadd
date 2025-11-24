@@ -56,6 +56,11 @@ public class ActivationMenu extends AbstractContainerMenu {
     @Override
     public boolean clickMenuButton(Player player, int id) {
         if (id == 0) { // 激活按钮
+            // 检查是否已激活
+            if (this.stack.getOrCreateTag().getBoolean("activated")) {
+                player.sendSystemMessage(Component.translatable("message.taczadd.activate.already"));
+                return true;
+            }
             ItemStack modules = getItemStack();
             if (!modules.isEmpty() && modules.getItem() == ModItems.GeneralUpgradeModule.get() && modules.getCount() >= 20) {
                 // 扣除材料

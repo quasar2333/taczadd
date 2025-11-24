@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "taczadd:item/mid_gun_crystal"
+  }
+}

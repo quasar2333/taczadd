@@ -1,9 +1,0 @@
-{
-  "weight": -15,
-  "armor_ignore":{
-    "addend": 0.2
-  },
-  "damage":{
-    "multiplier": 1.5
-  }
-}

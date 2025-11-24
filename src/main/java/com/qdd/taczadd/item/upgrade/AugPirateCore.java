@@ -1,15 +1,14 @@
 package com.qdd.taczadd.item.upgrade;
 
 import com.qdd.taczadd.item.UpgradeCore;
-import net.minecraft.world.item.Item;
 
 /**
- * AUG失落的海盗船核心
- * AK47共鸣 -> AUG失落的海盗船
+ * AK47共鸣-AK24特种部队进阶核心
+ * AK47共鸣 -> AK24特种部队
  */
 public class AugPirateCore extends UpgradeCore {
     
     public AugPirateCore(Properties properties) {
-        super(properties, "AUG失落的海盗船核心", "ak47gm", "augfly");
+        super(properties, "AK47共鸣-AK24特种部队进阶核心", "ak47gm", "ak24");
     }
 }

@@ -1,9 +1,0 @@
-{
-    "name": "ifcdaugfly.name",
-    "tooltip":"ifcdaugfly.tooltip",
-    "display": "ifcd:augfly_display",
-    "data": "ifcd:augfly_data",
-    "type": "rifle",
-    "item_type": "modern_kinetic",
-    "sort": 10
-}

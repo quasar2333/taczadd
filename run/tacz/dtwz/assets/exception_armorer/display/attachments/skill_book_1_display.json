@@ -1,7 +1,0 @@
-{
-  "slot": "exception_armorer:attachment/slot/skill_book_1",
-  "sounds": {
-    "install": "exception_armorer:misc/book_on",
-    "uninstall": "exception_armorer:misc/book_off"
-  }
-}

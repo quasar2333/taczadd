@@ -40,12 +40,17 @@ public class UpgradeCore extends Item implements MenuProvider {
      * 根据枪械名称获取正确的ResourceLocation
      */
     private ResourceLocation getGunResourceLocation(String gunName) {
-        // IFCD枪械包的枪械
+        // IFCD 枪械包
         if (gunName.equals("ak47gm") || gunName.equals("augfly") || gunName.equals("enddragon") ||
-            gunName.equals("ak117jxdf") || gunName.equals("ak117jxdf_a") || gunName.equals("ak117jxdf_b")) {
+            gunName.equals("ak117jxdf") || gunName.equals("ak117jxdf_a") || gunName.equals("ak117jxdf_b") ||
+            gunName.equals("ak24") || gunName.equals("pozhanzhe") || gunName.equals("zmzy")) {
             return new ResourceLocation("ifcd", gunName);
         }
-        // 默认TACZ枪械
+        // Applied Armorer 枪械包
+        if (gunName.equals("moritz_shotgun_sg914") || gunName.equals("moritz_sniper_semi_k30")) {
+            return new ResourceLocation("applied_armorer", gunName);
+        }
+        // 默认 TACZ 枪械
         return new ResourceLocation("tacz", gunName);
     }
 

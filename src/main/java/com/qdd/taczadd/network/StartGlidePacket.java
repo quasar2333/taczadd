@@ -1,6 +1,5 @@
 package com.qdd.taczadd.network;
 
-import com.qdd.taczadd.cap.PlayerCap;
 import com.qdd.taczadd.cap.PlayerCapProvider;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
@@ -16,8 +15,8 @@ public class StartGlidePacket {
         ctx.get().enqueueWork(() -> {
             ServerPlayer sp = ctx.get().getSender();
             if (sp == null) return;
-            sp.getCapability(PlayerCapProvider.PLAYER_DATA).ifPresent(PlayerCap::setGlideActive);
-            // 立即尝试开启一次（其后由tick保活），仅在空中时
+            sp.getCapability(PlayerCapProvider.PLAYER_DATA).ifPresent(cap -> cap.setGlideActive(true));
+            sp.resetFallDistance(); // clear any previous fall accumulation when starting glide
             if (!sp.onGround() && !sp.isInWaterOrBubble() && !sp.isPassenger()) {
                 sp.startFallFlying();
             }
