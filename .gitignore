@@ -11,15 +11,23 @@ run/
 .idea/
 *.iml
 .vscode/
+*.ipr
+*.iws
+.settings/
+.classpath
+.project
+out/
 
 # Compiled/temporary
 bin/
 *.log
 *.tmp
+*.class
 
 # OS
 .DS_Store
 Thumbs.db
+desktop.ini
 
 # Legacy docs (kept locally only)
 CREDITS.txt
@@ -31,6 +39,15 @@ TaczAdd模组游玩指南.md
 强化失败.mp3
 强化成功.mp3
 
+# Root level misc files
+img.png
+
+# Duplicate/nested project folder
+taczadd/
+
 # Others
 *.bak
 ~$*
+*.jar
+!gradle/wrapper/gradle-wrapper.jar
+libs/
