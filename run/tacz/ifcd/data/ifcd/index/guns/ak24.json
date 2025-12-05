@@ -1,0 +1,9 @@
+{
+    "name": "ifcdak24.name",
+    "tooltip":"ifcdak24.tooltip",
+    "display": "ifcd:ak24_display",
+    "data": "ifcd:ak24_data",
+    "type": "rifle",
+    "item_type": "modern_kinetic",
+    "sort": 10
+}

@@ -1,0 +1,21 @@
+{
+  "materials": [
+    {
+      "item": {
+        "item": "minecraft:iron_ingot"
+      },
+      "count": 13
+    },
+    {
+      "item": {
+        "item": "minecraft:magenta_dye"
+      },
+      "count": 1
+    }
+  ],
+  "result": {
+    "type": "grip",
+    "id": "ifcd:zmzy_grip"
+  },
+  "type": "tacz:gun_smith_table_crafting"
+}

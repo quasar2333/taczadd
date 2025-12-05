@@ -1,0 +1,8 @@
+{
+  "name": "ifcd.gun.paintingatr_wood.name",
+  "display": "ifcd:paintingatr_wood_display",
+  "data": "ifcd:paintingatr_data",
+  "tooltip": "ifcd.gun.paintingatr_wood.desc",
+  "type": "rifle",
+  "sort": 4
+ } 

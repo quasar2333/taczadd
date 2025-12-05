@@ -1,0 +1,55 @@
+{
+  "materials": [
+    {
+      "item": {
+        "item": "minecraft:black_dye"
+      },
+      "count": 1
+    },
+    {
+      "item": {
+        "item": "minecraft:white_dye"
+      },
+      "count": 1
+    },
+    {
+      "item": {
+        "item": "minecraft:ender_pearl"
+      },
+      "count": 1
+    },
+    {
+      "item": {
+        "item": "minecraft:iron_block"
+      },
+      "count": 24
+    },
+    {
+      "item": {
+        "item": "minecraft:netherite_ingot"
+      },
+      "count": 3
+    },
+    {
+      "item": {
+        "item": "minecraft:gold_block"
+      },
+      "count": 1
+    },
+    {
+      "item": {
+        "type": "forge:partial_nbt",
+        "item": "tacz:modern_kinetic_gun",
+        "nbt": {
+          "GunId": "tacz:ak47"
+        }
+      },
+      "count": 1
+    }
+  ],
+  "result": {
+    "type": "gun",
+    "id": "ifcd:paintingatr_gold"
+  },
+  "type": "tacz:gun_smith_table_crafting"
+}

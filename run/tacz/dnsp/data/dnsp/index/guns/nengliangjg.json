@@ -1,0 +1,8 @@
+{
+  "name": "dnsp.gun.nengliangjg.name",
+  "display": "dnsp:nengliangjg_display",
+  "data": "dnsp:nengliangjg_data",
+  "type": "sniper",
+  "sort": 4,
+  "item_type": "modern_kinetic"
+}

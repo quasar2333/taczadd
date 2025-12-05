@@ -1,0 +1,8 @@
+{
+  "name": "ifcd.gun.krig_ctzj.name",
+  "display": "ifcd:krig_ctzj_display",
+  "data": "ifcd:krig_ctzj_data",
+  "type": "rifle",
+  "tooltip": "ifcd.gun.krig_ctzj.desc",
+  "sort": 2
+}

@@ -1,0 +1,49 @@
+{
+    // ʹ�����Ƿ����ģ���ļ���models/gun/ak47_geo.json��ע�⣬����Ҫ�����ļ���׺��Ҳ��Ҫ������ͷ�� "models/"��
+    "model": "ifcd:gun/pozhanzhe_geo",
+    // ʹ�����Ƿ����ģ����ͼ��textures/gun/uv/ak47.png��ע�⣬����Ҫ�����ļ���׺��Ҳ��Ҫ������ͷ�� "textures/"��
+    "texture": "ifcd:gun/uv/pozhanzhe",
+    // ʹ�����Ƿ���ı��� 2D ��ͼ��textures/gun/slot/ak47.png��ע�⣬����Ҫ�����ļ���׺��Ҳ��Ҫ������ͷ�� "textures/"��
+    "slot": "ifcd:gun/slot/pozhanzhe",
+    "hud": "ifcd:gun/hud/pozhanzhe",
+    // �����˳Ƴ�ǹ������ֱ������default
+    "third_person_animation": "default",
+    // ���õĶ����������ڰ�Ŀ¼�µ� animations �ļ�����Ѱ�ң�������Ϊ��
+  "animation": "ifcd:pozhanzhe",
+  "state_machine": "ifcd:pozhanzhe_state_machine",
+  // ָ��ʹ��ȱʡ��������Ϊ�ա��������ָ���Ķ����ļ���ȱ��ĳ���������� draw ����������ȱʡ����������
+  // ֵ��Ϊ rifle��pistol
+  "use_default_animation": "rifle",
+      "muzzle_flash": {
+      // ǹ�ڻ�����ͼ·��
+      "texture": "tacz:flash/common_muzzle_flash",
+      // ����ϵ��
+      "scale": 1
+    },
+        // �׿ǵ���Ⱦ���ݣ���Ϊ�գ���Ϊ�գ���ǹе���׿�
+    "shell": {
+        // �׿ǵĳ��ٶȵ� xyz ֵ
+        "initial_velocity": [5, 2, 1],
+        // �׿�����仯���˶��ٶ� xyz ֵ���� 0 ~ 1 ������ź�����ڳ��ٶ��ϡ�
+        "random_velocity": [1, 1, 0.25],
+        // �׿ǵļ��ٶ�
+        "acceleration": [0.0, -10, 0.0],
+        // �׿ǵ�������ٶȣ��� 0.5 ~ 1 ������š�
+        "angular_velocity": [360, -1200, 90],
+        // �׿���Ⱦ���ʱ�䣬��λΪ��
+        "living_time": 1.0
+    },
+  // ǹе��Ч���ڰ�Ŀ¼�� sounds �ļ�����Ѱ�ң�������Ϊ��
+  "sounds": {
+    "shoot": "tacz:ak47/ak47_shoot",
+    "shoot_3p": "tacz:ak47/ak47_shoot_3p",
+    "reload_empty": "ifcd:pozhanzhe/pozhanzhe_reload_empty",
+    "reload_tactical": "ifcd:pozhanzhe/pozhanzhe_reload_tactical",
+    "inspect": "ifcd:pozhanzhe/pozhanzhe_inspect",
+    "inspect_empty": "ifcd:pozhanzhe/pozhanzhe_inspect_empty",
+    "draw": "ifcd:pozhanzhe/pozhanzhe_draw",
+    "put_away": "tacz:ak47/ak47_put_away",
+    "silence": "tacz:ak47/ak47_silence",
+    "silence_3p": "tacz:ak47/ak47_silence_3p"
+  }
+}

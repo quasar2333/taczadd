@@ -1,0 +1,7 @@
+{
+  "name": "dnsp.gun.sssd.name",
+  "display": "dnsp:sssd_display",
+  "data": "dnsp:sssd_data",
+  "type": "shotgun",
+  "sort": 2
+}

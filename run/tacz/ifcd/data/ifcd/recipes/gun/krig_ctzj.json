@@ -1,0 +1,45 @@
+{
+  "materials": [
+    {
+      "item": {
+        "item": "minecraft:redstone"
+      },
+      "count": 64
+    },
+    {
+      "item": {
+        "item": "minecraft:lapis_lazuli"
+      },
+      "count": 32
+    },
+    {
+      "item": {
+        "item": "minecraft:feather"
+      },
+      "count": 1
+    },
+    {
+      "item": {
+        "item": "minecraft:redstone_lamp"
+      },
+      "count": 1
+    },
+    {
+      "item": {
+        "item": "minecraft:netherite_block"
+      },
+      "count": 2
+    },
+    {
+      "item": {
+        "item": "minecraft:diamond"
+      },
+      "count": 9
+    }
+  ],
+  "result": {
+    "type": "gun",
+    "id": "ifcd:krig_ctzj"
+  },
+  "type": "tacz:gun_smith_table_crafting"
+}

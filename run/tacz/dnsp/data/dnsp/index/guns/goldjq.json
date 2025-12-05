@@ -1,0 +1,8 @@
+{
+  "name": "dnsp.gun.goldjq.name",
+  "display": "dnsp:goldjq_display",
+  "data": "dnsp:goldjq_data",
+  "tooltip": "dnsp.gun.goldjq.desc",
+  "type": "mg",
+  "sort": 1
+}

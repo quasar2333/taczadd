@@ -1,0 +1,58 @@
+{
+  "pack.tacz.ifcd_gun.name": "§7IFCD“§4墨§e韵§9横§2生§7”",
+  "pack.tacz.ifcd_gun.desc": "致力于制作多样风格的优质枪械",
+
+  "ifcdak24.name": "§4AK24 “特种部队”",
+  "ifcdak24.tooltip":  "§f“在未来世界里，全球局势动荡不安，传统国界模糊，\nAK24成为打击真正的罪恶，捍卫正义的最后防线。”\n                                                              ——科瓦洛夫《训练日记》",
+
+  "ifcdpozhanzhe.name": "§eAK47 “破战者”",
+  "ifcdpozhanzhe.tooltip": "  §f“一场前所未有的乱战之中，§n民间的科技研发者§f，\n秘密开展了一项名为“AK47破战者”的项目。”\n                                                 ——刘平《破战者试验记录》",
+
+  "ifcd.attachment.pozhanzhe_grip.name":"§e破战者 战术垂直握把",
+
+  "ifcdaugfly.name": "§6AUG “失落的海盗船”",
+  "ifcdaugfly.tooltip": "§f“无数探险家、海盗和寻宝者都被§b“幽影帆影”§f中的宝藏吸引，\n然而他们不知道，他们的到来，才创造了宝藏。”\n                                                                             ——来自云龙的赞助",
+
+  "ifcdak117jxdf.name":"§2AK117 “极限巅峰”",
+  "ifcdak117jxdf.tooltip":"§f“擎-盏清茶，任丝丝幽香冲淡浮尘，沉淀思绪，体会人生。\n其香泽荡心灵，其味超尘拔俗。”",
+
+  "ifcdak117jxdfa.name":"§5AK117 “极限巅峰”【毒液】",
+  "ifcdak117jxdf_a.tooltip":"§f“每个人都有自己的不幸，也许是分别，死亡，意外。\n不论如何，你都会因此告别过去，从而变成另外的样子。\n我们都有自己的麻烦，自己的问题，自己的，恶魔。”",
+
+  "ifcdak117jxdfb.name":"§1AK117 “极限巅峰”【深海】",
+  "ifcdak117jxdf_b.tooltip":"§f“深海是一个色彩斑斓的世界，各种生物在黑暗中绽放出鲜艳的色彩，\n构成了一幅幅令人陶醉的画卷，让人沉醉其中，无法自拔。”",
+
+  "ifcdzmzy.name":"§5H4 Blixen “醉迷之音”",
+  "ifcd.attachment.zmzy_grip.name":"§5醉迷之音 重型握把",
+  "ifcdscopezmzy.name":"§5醉迷之音 1.5x 红点瞄具",
+  "ifcdzmzy.tooltip":"§f“醉里且贪欢笑，要愁那得工夫。近来始觉古人书。信著全无是处。\n昨夜松边醉倒，问松我醉何如。只疑松动要来扶。以手推松曰去。”",
+
+  "ifcdak47gm.name":"§4AK47 “共鸣”",
+  "ifcdak47gm.tooltip":"§f来自B站用户：“油条泡豆浆的赞助”",
+  "ifcd.attachment.ak47gm_grip.name":"§4共鸣 前握把",
+  "ifcdscopeak47gm.name":"§4共鸣 OKP7 全息瞄具",
+
+  "ifcd.gun.rm68zrgl.name":"§2RM68 自然规律",
+
+  "ifcdicedragon.name":"§1M4A1 “冰龙”",
+  "ifcdicedragon.tooltip":"§f“冰龙是一只冷酷的龙，它冷冰冰的，冷酷的，冷漠的，\n它是一只冰冷的龙，它是一只冷酷的龙，它是一只冷酷的龙。”",
+
+  "ifcdenddragon.name":"§5M4A1 “末影龙”",
+  "ifcdenddragon.tooltip":"动画原型来自B站UP主：“龙殿川”",
+
+  "ifcd.gun.paintingatr.name":"§3TYPE-9“丹青万壑”§3",
+  "ifcd.gun.paintingatr_fire.name":"§4TYPE-9“丹青万壑”§4",
+  "ifcd.gun.paintingatr_wood.name":"§aTYPE-9“丹青万壑”§a",
+  "ifcd.gun.paintingatr_gold.name":"§eTYPE-9“丹青万壑”§e",
+  "ifcd.gun.paintingatr_dirt.name":"§7TYPE-9“丹青万壑”§7",
+
+  "ifcd.gun.paintingatr.desc":"§f“飞流直下三千尺，疑是银河落九天”",
+  "ifcd.gun.paintingatr_fire.desc":"§f“黑烟漠漠，红焰腾腾”",
+  "ifcd.gun.paintingatr_wood.desc":"§f“野火烧不尽，春风吹又生”",
+  "ifcd.gun.paintingatr_gold.desc":"§f“银鞍照白马，飒沓如流星”",
+  "ifcd.gun.paintingatr_dirt.desc":"§f“扎根深壤，枝繁叶茂自堂堂”",
+
+  "ifcd.gun.krig_ctzj.name":"§3KRIG-6 “苍天之剑”",
+  "ifcd.gun.krig_ctzj.desc":"“如果自己说着做不到，而什么都不去做的话，\n那就更是什么都做不到”"
+
+}

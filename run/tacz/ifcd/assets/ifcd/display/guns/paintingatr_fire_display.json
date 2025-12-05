@@ -1,0 +1,56 @@
+{
+  "model": "ifcd:gun/paintingatr_geo",
+  "texture": "ifcd:gun/uv/paintingatr_fire",
+  "hud": "ifcd:gun/hud/paintingatr",
+  "slot": "ifcd:gun/slot/paintingatr_fire",
+  "animation": "ifcd:paintingatr",
+  "use_default_animation": "rifle",
+  "third_person_animation": "default",
+  "state_machine": "ifcd:paintingatr_state_machine",
+  "transform": {
+    "scale": {
+      "thirdperson": [0.6, 0.6, 0.6],
+      "ground": [0.6, 0.6, 0.6],
+      "fixed": [1.2, 1.2, 1.2]
+    }
+  },
+  "muzzle_flash": {
+    "texture": "ifcd:flash/paintingatr",
+    "scale": 1.125
+  },
+  "iron_zoom": 1.33,
+  "zoom_model_fov": 55,
+  "shell": {
+    "initial_velocity": [5, 2, 1],
+    "random_velocity": [1, 1, 0.25],
+    "acceleration": [0.0, -10, 0.0],
+    "angular_velocity": [360, -1200, 90],
+    "living_time": 1.0
+  },
+  "sounds": {
+    "shoot": "ifcd:paintingatr/paintingatr_shoot",
+    "shoot_3p": "ifcd:scar_h/scar_h_shoot_3p",
+    "silence": "tacz:m4a1/m4a1_silence",
+    "silence_3p": "tacz:m4a1/m4a1_silence_3p",
+    "dry_fire": "ifcd:dry_fire",
+    "fire_select": "ifcd:fire_select",
+    "head_hit": "ifcd:head_hit",
+    "flesh_hit": "ifcd:flesh_hit",
+    "kill": "ifcd:kill",
+    "melee_push": "ifcd:melee_stock/melee_stock_01",
+    "melee_stock": "ifcd:melee_stock/melee_stock_03",
+    "inspect": "ifcd:paintingatr/paintingatr_inspect"
+  },
+  "offhand_show": {
+    "pos": [0, 19, 4],
+    "rotate": [0, 0, 60],
+    "scale": [0.5, 0.5, 0.5]
+  },
+  "hotbar_show": {
+    "0": {
+      "pos": [0, 19, 3],
+      "rotate": [-180, 0, 120],
+      "scale": [0.5, 0.5, 0.5]
+    }
+  }
+}

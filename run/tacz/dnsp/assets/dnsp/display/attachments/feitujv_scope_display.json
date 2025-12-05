@@ -1,0 +1,15 @@
+{
+  "slot": "dnsp:attachment/slot/feitujv_scope",
+  "model": "dnsp:attachment/feitujv_scope_geo",
+  "texture": "dnsp:attachment/uv/feitujv_scope",
+  "zoom": [
+    4
+  ],
+  "scope": true,
+  "sight":false,
+  "fov": 55.0,
+  "sounds": {
+    "install": "tacz:attachments/scope_general_b",
+    "uninstall": "tacz:attachments/scope_general_b"
+  }
+}

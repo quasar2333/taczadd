@@ -1,0 +1,8 @@
+{
+  "hidden": true,
+  "name": "dnsp.attachment.feitujv_scope.name",
+  "display": "dnsp:feitujv_scope_display",
+  "data": "dnsp:feitujv_scope_data",
+  "type": "scope",
+  "sort": 100
+}

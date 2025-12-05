@@ -1,0 +1,9 @@
+{
+    "name": "ifcdzmzy.name",
+    "tooltip":"ifcdzmzy.tooltip",
+    "display": "ifcd:zmzy_display",
+    "data": "ifcd:zmzy_data",
+    "type": "rifle",
+    "item_type": "modern_kinetic",
+    "sort": 10
+}
