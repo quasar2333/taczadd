@@ -3,14 +3,13 @@ package com.qdd.taczadd.cap;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.capabilities.*;
-import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-public class GamCap implements ICapabilityProvider, INBTSerializable<CompoundTag> {
+public class GamCap implements ICapabilitySerializable<CompoundTag> {
     private ItemStackHandler gam=null;
 
     private LazyOptional<IItemHandler> optional=LazyOptional.of(this::createPlayerCap);

@@ -50,6 +50,26 @@ public class gamslot extends SlotItemHandler {
 
     @Override
     public IItemHandler getItemHandler(){
-        return stack.getCapability(ForgeCapabilities.ITEM_HANDLER).orElse(super.getItemHandler());
+        // 必须从装备的 capability 获取，不能回退到本地 handler，否则宝石会丢失
+        if (stack.isEmpty()) {
+            return super.getItemHandler();
+        }
+        return stack.getCapability(ForgeCapabilities.ITEM_HANDLER).orElseGet(() -> {
+            // Mohist 等混合服务端可能有 capability 同步问题
+            // 强制重新获取 capability
+            return super.getItemHandler();
+        });
+    }
+    
+    @Override
+    public boolean hasItem() {
+        // 确保从正确的 handler 检查物品
+        return !getItemHandler().getStackInSlot(getSlotIndex()).isEmpty();
+    }
+    
+    @Override
+    public @NotNull ItemStack getItem() {
+        // 确保从正确的 handler 获取物品
+        return getItemHandler().getStackInSlot(getSlotIndex());
     }
 }

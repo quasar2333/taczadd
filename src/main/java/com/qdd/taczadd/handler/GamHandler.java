@@ -17,6 +17,7 @@ import com.qdd.taczadd.item.Attributes.ModAttributes;
 import com.qdd.taczadd.item.GamItem;
 import com.tacz.guns.api.item.gun.AbstractGunItem;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.items.ItemStackHandler;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
@@ -33,6 +34,7 @@ public class GamHandler {
     public static List<ItemStack> getGams(ItemStack stack){
         List<ItemStack> list = new ArrayList<>();
         if (stack.getItem() instanceof ArmorItem || stack.getItem() instanceof AbstractGunItem){
+            // 先尝试从 capability 获取
             stack.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(gams-> {
                 for (int i=0;i<gams.getSlots();i++){
                     if (gams.getStackInSlot(i).isEmpty())continue;
@@ -40,6 +42,25 @@ public class GamHandler {
                     list.add(gam);
                 }
             });
+            
+            // 如果 capability 为空，尝试从 NBT 备份恢复 (Mohist 兼容)
+            if (list.isEmpty()) {
+                CompoundTag tag = stack.getOrCreateTag();
+                if (tag.contains("GemBackupHandler", 10)) {
+                    // 恢复 capability 数据
+                    stack.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(handler -> {
+                        if (handler instanceof ItemStackHandler ish) {
+                            ish.deserializeNBT(tag.getCompound("GemBackupHandler"));
+                            // 重新读取
+                            for (int i = 0; i < ish.getSlots(); i++) {
+                                if (!ish.getStackInSlot(i).isEmpty()) {
+                                    list.add(ish.getStackInSlot(i));
+                                }
+                            }
+                        }
+                    });
+                }
+            }
         }
         return list;
     }
