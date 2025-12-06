@@ -180,7 +180,7 @@
   "tooltip.gam.reinforced_crystal_armor": "用于强化装备（盔甲）的水晶\n每次强化可以使保底进度+1\n使用方法：右键打开强化界面",
 
   "item.taczadd.armor_inducer": "装备诱导器",
-  "tooltip.taczadd.armor_inducer": "诱导装备/枪械强化方向的一种道具\n使用后有1%几率诱导成功\n使本装备之后在强化成功时有90%的概率增加5%枪械伤害\n而不是1点伤害减免\n通过副本获得，可交易",
+  "tooltip.taczadd.armor_inducer": "诱导装备在强化方向的一种道具\n使用后有0.5%几率诱导成功\n使本装备之后在强化成功时有90%的概率增加5%枪械伤害\n而不是1点伤害减免\n通过副本获得，可交易",
   "message.taczadd.inducer.success": "诱导成功！",
   "message.taczadd.inducer.success.gun": "枪械诱导成功！",
   "message.taczadd.inducer.failed": "诱导失败！",
@@ -188,9 +188,9 @@
   "message.taczadd.inducer.already_induced": "该物品已经被诱导过了！",
   "message.taczadd.activate.already": "该核心已经激活过了！",
   "gui.taczadd.inducer.button": "诱导",
-  "gui.taczadd.inducer.tooltip": "点击进行诱导（1%成功率）\n成功后90%概率增加枪械伤害",
-  "gui.taczadd.inducer.no_item": "请放入装备或枪械",
-  "gui.taczadd.inducer.no_armor": "请放入装备或枪械",
+  "gui.taczadd.inducer.tooltip": "点击进行诱导（0.5%成功率）\n成功后90%概率增加枪械伤害",
+  "gui.taczadd.inducer.no_item": "请放入装备",
+  "gui.taczadd.inducer.no_armor": "请放入装备",
   "gui.taczadd.inducer.already_induced": "该物品已被诱导"
 
 }

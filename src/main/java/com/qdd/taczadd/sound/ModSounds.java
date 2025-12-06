@@ -34,4 +34,24 @@ public class ModSounds {
             "reinforce_fail",
             () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(Taczadd.MODID, "reinforce_fail"))
     );
+
+    // skill sounds
+    public static final RegistryObject<SoundEvent> SG914_SKILL = SOUND_EVENTS.register(
+            "sg914_skill",
+            () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(Taczadd.MODID, "sg914_skill"))
+    );
+    public static final RegistryObject<SoundEvent> POZHANZHE_SKILL = SOUND_EVENTS.register(
+            "pozhanzhe_skill",
+            () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(Taczadd.MODID, "pozhanzhe_skill"))
+    );
+
+    // inducer sounds
+    public static final RegistryObject<SoundEvent> INDUCER_SUCCESS = SOUND_EVENTS.register(
+            "inducer_success",
+            () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(Taczadd.MODID, "inducer_success"))
+    );
+    public static final RegistryObject<SoundEvent> INDUCER_FAIL = SOUND_EVENTS.register(
+            "inducer_fail",
+            () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(Taczadd.MODID, "inducer_fail"))
+    );
 }

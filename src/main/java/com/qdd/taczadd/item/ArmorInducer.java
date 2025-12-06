@@ -22,8 +22,9 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * 装备诱导器：诱导装备强化方向的道具
- * 使用后有1%几率诱导成功，成功后装备在强化时有90%概率增加枪械伤害
+ * 装备诱导器：诱导装备在强化方向的道具
+ * 使用后有0.5%几率诱导成功，成功后装备在强化时有90%概率增加5%枪械伤害而不是1点伤害减免
+ * 只能诱导装备（盔甲），不能诱导枪械
  */
 public class ArmorInducer extends Item implements MenuProvider {
     

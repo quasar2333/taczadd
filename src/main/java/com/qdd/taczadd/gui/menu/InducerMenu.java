@@ -13,8 +13,9 @@ import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.sounds.SoundSource;
 import com.qdd.taczadd.gui.ModMenuType;
-import com.tacz.guns.api.item.gun.AbstractGunItem;
+import com.qdd.taczadd.sound.ModSounds;
 
 /**
  * 装备诱导器菜单
@@ -36,10 +37,10 @@ public class InducerMenu extends AbstractContainerMenu {
         addPlayerHotbar(inv);
         this.inv = inv;
         this.stack = stack;
-        // 插槽：可以放入盔甲或枪械
+        // 插槽：只能放入装备（盔甲），不能放入枪械
         this.addSlot(new Slot(ItemSlots, 0, 26, 30) {
             public boolean mayPlace(ItemStack stack) {
-                return stack.getItem() instanceof ArmorItem || stack.getItem() instanceof AbstractGunItem;
+                return stack.getItem() instanceof ArmorItem;
             }
             public int getMaxStackSize() {
                 return 1;
@@ -57,28 +58,34 @@ public class InducerMenu extends AbstractContainerMenu {
     public boolean clickMenuButton(Player player, int id) {
         if (id == 0) {
             ItemStack targetStack = getItemStack();
-            // 检查是否为盔甲或枪械
+            // 只能诱导装备（盔甲），不能诱导枪械
             boolean isArmor = targetStack.getItem() instanceof ArmorItem;
-            boolean isGun = targetStack.getItem() instanceof AbstractGunItem;
             
-            if (!targetStack.isEmpty() && (isArmor || isGun)) {
+            if (!targetStack.isEmpty() && isArmor) {
                 // 检查是否已经被诱导过
                 if (targetStack.getOrCreateTag().getBoolean("armor_induced")) {
                     player.sendSystemMessage(Component.translatable("message.taczadd.inducer.already_induced").withStyle(ChatFormatting.YELLOW));
                     return true;
                 }
                 
-                // 1%概率成功
-                boolean success = player.getRandom().nextFloat() < 0.01f;
+                // 0.5%概率成功
+                boolean success = player.getRandom().nextFloat() < 0.005f;
                 
                 if (success) {
                     // 诱导成功
                     targetStack.getOrCreateTag().putBoolean("armor_induced", true);
-                    String messageKey = isGun ? "message.taczadd.inducer.success.gun" : "message.taczadd.inducer.success";
-                    player.sendSystemMessage(Component.translatable(messageKey).withStyle(ChatFormatting.GREEN));
+                    player.sendSystemMessage(Component.translatable("message.taczadd.inducer.success").withStyle(ChatFormatting.GREEN));
+                    // 播放成功音效
+                    if (!player.level().isClientSide()) {
+                        ((net.minecraft.server.level.ServerPlayer) player).playNotifySound(ModSounds.INDUCER_SUCCESS.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
+                    }
                 } else {
                     // 诱导失败
                     player.sendSystemMessage(Component.translatable("message.taczadd.inducer.failed").withStyle(ChatFormatting.YELLOW));
+                    // 播放失败音效
+                    if (!player.level().isClientSide()) {
+                        ((net.minecraft.server.level.ServerPlayer) player).playNotifySound(ModSounds.INDUCER_FAIL.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
+                    }
                 }
                 
                 // 消耗诱导器

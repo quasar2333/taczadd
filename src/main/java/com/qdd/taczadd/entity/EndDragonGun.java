@@ -1,18 +1,11 @@
 package com.qdd.taczadd.entity;
 
-import net.minecraft.util.Mth;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.projectile.ProjectileUtil;
-import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.EntityHitResult;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import com.tacz.guns.entity.EntityKineticBullet;
-import com.tacz.guns.util.EntityUtil;
-import com.tacz.guns.util.block.BlockRayTrace;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.GeoAnimatable;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -22,23 +15,29 @@ import software.bernie.geckolib.core.animation.RawAnimation;
 import software.bernie.geckolib.core.object.PlayState;
 import software.bernie.geckolib.util.GeckoLibUtil;
 
-import java.util.List;
-
-public class EndDragonGun extends SkillEntity  implements GeoEntity {
+/**
+ * 末影龙技能：射击20发触发，对目标3x3x3范围内的敌人造成一次1000%的枪械伤害
+ */
+public class EndDragonGun extends SkillEntity implements GeoEntity {
     private final AnimatableInstanceCache geoCache = GeckoLibUtil.createInstanceCache(this);
     private static final RawAnimation spell = RawAnimation.begin().thenPlay("skill");
     private EntityKineticBullet kb;
     private int tick;
+    private Entity target;
 
     public EndDragonGun(EntityType<? extends SkillEntity> type, Level level) {
         super(type, level);
     }
-    public EndDragonGun(EntityType<? extends SkillEntity> type, Entity entity , Vec3 pos) {
-        super(type,entity);
-        double posX = this.getOwner().xOld + (this.getOwner().getX() - this.getOwner().xOld) / (double)2.0F;
-        double posY = this.getOwner().yOld + (this.getOwner().getY() - this.getOwner().yOld) / (double)2.0F + (double)this.getOwner().getEyeHeight();
-        double posZ = this.getOwner().zOld + (this.getOwner().getZ() - this.getOwner().zOld) / (double)2.0F;
-        this.setPos(posX, posY, posZ);
+    
+    public EndDragonGun(EntityType<? extends SkillEntity> type, Entity entity, Vec3 pos, Entity target) {
+        super(type, entity);
+        this.target = target;
+        // 在目标位置生成
+        if (target != null) {
+            this.setPos(target.position().add(0, 1, 0));
+        } else {
+            this.setPos(pos);
+        }
     }
     @Override
     protected  EntityKineticBullet getkb() {
@@ -53,64 +52,25 @@ public class EndDragonGun extends SkillEntity  implements GeoEntity {
     @Override
     public void tick(){
         super.tick();
-        if (tick==1){
-            triggerAnim("ed","ed");
+        
+        // 在第1帧立即对目标3x3x3范围内的敌人造成1000%伤害
+        if (tick == 1 && !this.level().isClientSide() && target != null) {
+            // 获取目标周围3x3x3范围内的所有生物实体
+            level().getEntitiesOfClass(LivingEntity.class,
+                    target.getBoundingBox().inflate(1.5D, 1.5D, 1.5D),
+                    this::canskill).forEach(this::skill);
         }
-        if (tick==20){
+        
+        // 短暂存在后消失（无动画）
+        if (tick >= 5) {
             discard();
         }
-        this.onBulletTick();
-        Vec3 movement = this.getDeltaMovement();
-        double x = movement.x;
-        double y = movement.y;
-        double z = movement.z;
-        Vec3 vec3 = movement;
-        if (this.xRotO == 0.0F && this.yRotO == 0.0F) {
-            double d0 = vec3.horizontalDistance();
-            this.setYRot((float)(Mth.atan2(vec3.x, vec3.z) * (double)(180F / (float)Math.PI)));
-            this.setXRot((float)(Mth.atan2(vec3.y, d0) * (double)(180F / (float)Math.PI)));
-            this.yRotO = this.getYRot();
-            this.xRotO = this.getXRot();
-        }
-        double nextPosX = this.getX() + x;
-        double nextPosY = this.getY() + y;
-        double nextPosZ = this.getZ() + z;
-        this.setPos(nextPosX, nextPosY, nextPosZ);
         tick++;
     }
 
-    protected void onBulletTick() {
-        if (!this.level().isClientSide()) {
-            Vec3 startVec = this.position();
-            Vec3 endVec = startVec.add(this.getDeltaMovement());
-            BlockHitResult resultB = BlockRayTrace.rayTraceBlocks(this.level(), new ClipContext(startVec, endVec, ClipContext.Block.COLLIDER, ClipContext.Fluid.NONE, this));
-            if (resultB.getType() != HitResult.Type.MISS) {
-                endVec = resultB.getLocation();
-            }
-
-            List<EntityKineticBullet.EntityResult> hitEntities = null;
-            hitEntities = EntityUtil.findEntitiesOnPath(this, startVec, endVec);
-            if (!hitEntities.isEmpty()) {
-                EntityKineticBullet.EntityResult[] hitEntityResult = hitEntities.toArray(new EntityKineticBullet.EntityResult[0]);
-                for(EntityKineticBullet.EntityResult entityResult : hitEntityResult) {
-                    EntityHitResult var11 = new EntityHitResult(entityResult.getEntity());
-                    this.onHitEntity(var11);
-                }
-            }
-
-            this.onHitBlock(resultB);
-        }
-
-    }
     @Override
     protected int multiple(){
-        return 6;
-    }
-    @Override
-    protected void onHitEntity(EntityHitResult p_37259_) {
-        Entity entity=p_37259_.getEntity();
-        if (entity.equals(this.getOwner()))return;
-        skill(entity);
+        return 10; // 1000% 伤害 = 10倍
     }
 
     @Override

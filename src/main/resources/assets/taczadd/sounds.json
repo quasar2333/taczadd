@@ -4,5 +4,10 @@
   "jian": { "sounds": [ "taczadd:jian" ] },
 
   "reinforce_success": { "sounds": [ "taczadd:reinforce_success" ] },
-  "reinforce_fail":    { "sounds": [ "taczadd:reinforce_fail" ] }
+  "reinforce_fail":    { "sounds": [ "taczadd:reinforce_fail" ] },
+
+  "sg914_skill": { "sounds": [ "taczadd:sg914_skill" ] },
+  "pozhanzhe_skill": { "sounds": [ "taczadd:pozhanzhe_skill" ] },
+  "inducer_success": { "sounds": [ "taczadd:inducer_success" ] },
+  "inducer_fail": { "sounds": [ "taczadd:inducer_fail" ] }
 }

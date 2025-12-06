@@ -1,11 +1,13 @@
 package com.qdd.taczadd.entity;
 
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import com.qdd.taczadd.sound.ModSounds;
 import com.tacz.guns.entity.EntityKineticBullet;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.GeoAnimatable;
@@ -58,8 +60,11 @@ public class PozhanzheSkillEntity extends SkillEntity implements GeoEntity {
             triggerAnim("pozhanzhe", "pozhanzhe");
         }
         
-        // Deal AOE damage at tick 60 (2 seconds into 3-second animation)
+        // Deal AOE damage at tick 30, play fist landing sound
         if (tick == 30 && !this.level().isClientSide() && target != null) {
+            // 播放拳头落地音效
+            level().playSound(null, this.getX(), this.getY(), this.getZ(), 
+                    ModSounds.POZHANZHE_SKILL.get(), SoundSource.PLAYERS, 1.0f, 1.0f);
             // Get all living entities in 8x8x8 area around target
             level().getEntitiesOfClass(LivingEntity.class,
                     target.getBoundingBox().inflate(4.0D, 4.0D, 4.0D),

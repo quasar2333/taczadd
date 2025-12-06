@@ -23,12 +23,12 @@ public class GunSkill {
         "skillicon4",new ResourceLocation(Taczadd.MODID,"textures/icon/icedragon4.png")
     );
     public static final Map<String, Object> ak24= Map.of(
-        "ammoc",30,
+        "ammoc",20,
         "skillicon",new ResourceLocation(Taczadd.MODID,"textures/icon/icedragon.png")
     );
 
     public static final Map<String, Object> enddragon= Map.of(
-            "ammoc",30,
+            "ammoc",20,
             "skillicon",new ResourceLocation(Taczadd.MODID,"textures/icon/enddragon.png")
     );
 
@@ -75,13 +75,12 @@ public class GunSkill {
             "ammoc", 3,
             "skillicon", new ResourceLocation(Taczadd.MODID, "textures/icon/zmzy5.png")
     );
-    // Pozhanzhe: Transfer ak117jxdf skill (cooldown-based) and add new 30-shot explosion skill
+    // Pozhanzhe: 两个技能都改成射击20发触发
     public static final Map<String, Object> pozhanzhe= Map.of(
-            "ammoc",-1,
-            "ammoc2",30,
+            "ammoc",20,
+            "ammoc2",20,
             "skillicon",new ResourceLocation(Taczadd.MODID,"textures/icon/ak117jxdf.png"),
-            "skillicon2",new ResourceLocation(Taczadd.MODID,"textures/icon/pozhanzhe.png"),
-            "cd",100
+            "skillicon2",new ResourceLocation(Taczadd.MODID,"textures/icon/pozhanzhe.png")
     );
 
     public static final Map<String,Map<String,Object>> Skill = Map.ofEntries(
@@ -113,12 +112,13 @@ public class GunSkill {
             }
             case "moritz_shotgun_sg914": {
                 com.qdd.taczadd.entity.SGSwordEntity skill = new com.qdd.taczadd.entity.SGSwordEntity(com.qdd.taczadd.entity.ModEntities.SGS_Entity.get(), entity, pos);
+                skill.setInitialFacing(entity.getYRot(), entity.getXRot()); // 设置朝向（像K30一样）
                 entity.level().addFreshEntity(skill);
                 break;
             }
-            case "enddragon":{
-                EndDragonGun skill=new EndDragonGun(ModEntities.ED_Entity.get(),entity,pos);
-                skill.shootFromRotation(skill,skill.getOwner().getXRot(),skill.getOwner().getYRot(),0,1f,0);
+            case "enddragon":if (pierce==1){
+                // 末影龙技能：射击20发触发，对目标3x3x3范围内的敌人造成一次1000%的枪械伤害
+                EndDragonGun skill=new EndDragonGun(ModEntities.ED_Entity.get(),entity,pos,target);
                 entity.level().addFreshEntity(skill);
                 break;
             } case "zmzy":if (pierce==1){

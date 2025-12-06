@@ -53,11 +53,19 @@ public class Zmzy30Entity extends SkillEntity implements GeoEntity {
             discard();
         }
         if (this.level().isClientSide()) {
+            // 立即触发动画，无间隙切换，删除中间罚站动画
             if (tick == 1) {
-                // ensure client starts playing immediately
                 triggerAnim("zmzy", "zmzy301");
-            } else if (tick % 30 == 0) {
-                triggerAnim("zmzy", "zmzy30" +(int) Math.ceil((double) tick / 30));
+            } else if (tick == 28) {
+                triggerAnim("zmzy", "zmzy302");
+            } else if (tick == 56) {
+                triggerAnim("zmzy", "zmzy303");
+            } else if (tick == 84) {
+                triggerAnim("zmzy", "zmzy304");
+            } else if (tick == 112) {
+                triggerAnim("zmzy", "zmzy305");
+            } else if (tick == 140) {
+                triggerAnim("zmzy", "zmzy306");
             }
         } else {
             if (tick%30==3&&target!=null&&target.isAlive()) {
