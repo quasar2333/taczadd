@@ -88,6 +88,11 @@ minecraft {
             property 'forge.enabledGameTestNamespaces', mod_id
             // Random username to allow multiple clients in multiplayer
             args '--username', "Dev${new Random().nextInt(10000)}"
+            // 离线模式 - 关闭正版验证
+            jvmArg '-Dminecraft.api.auth.host=https://0.0.0.0'
+            jvmArg '-Dminecraft.api.account.host=https://0.0.0.0'
+            jvmArg '-Dminecraft.api.session.host=https://0.0.0.0'
+            jvmArg '-Dminecraft.api.services.host=https://0.0.0.0'
         }
 
         server {
