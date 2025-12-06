@@ -116,13 +116,11 @@ public class GameEvent {
     public static void onItemTooltip(ItemTooltipEvent event){
         if (event.getItemStack().getItem() instanceof ArmorItem || event.getItemStack().getItem() instanceof AbstractGunItem){
             ItemStack stack=event.getItemStack();
-            // Append reinforcement level to the first line (gun name) as "+<level>"
-            if (stack.getItem() instanceof AbstractGunItem) {
-                int reinforced = stack.getOrCreateTag().getInt("reinforced");
-                if (reinforced > 0 && !event.getToolTip().isEmpty()) {
-                    Component first = event.getToolTip().get(0);
-                    event.getToolTip().set(0, Component.empty().append(first).append(Component.literal(" +" + reinforced)));
-                }
+            // Append reinforcement level to the first line (item name) as "+<level>"
+            int reinforced = stack.getOrCreateTag().getInt("reinforced");
+            if (reinforced > 0 && !event.getToolTip().isEmpty()) {
+                Component first = event.getToolTip().get(0);
+                event.getToolTip().set(0, Component.empty().append(first).append(Component.literal(" +" + reinforced)));
             }
             if (event.getEntity() != null && net.minecraft.client.gui.screens.Screen.hasShiftDown()){
                 event.getToolTip().addAll(GamHandler.getGamInfo(stack));
