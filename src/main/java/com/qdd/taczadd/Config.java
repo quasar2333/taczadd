@@ -28,15 +28,15 @@ public class Config
 //            .defineInRange("magicNumber", 42, 0, Integer.MAX_VALUE);
 //
     public static final ForgeConfigSpec.ConfigValue<String> PASSWORD = BUILDER
-            .comment("password")
+            .comment("服务器启动校验密码（不填或不匹配将关闭服务器）")
             .define("password", "");
 
     public static final ForgeConfigSpec.BooleanValue SKILL_KNOCKBACK_ENABLED = BUILDER
-            .comment("Whether weapon skills apply knockback / launch effects")
-            .define("skillKnockbackEnabled", true);
+            .comment("技能击退/击飞开关（关闭后：冰龙等技能不会把怪打飞）")
+            .define("skillKnockbackEnabled", false);
 
     public static final ForgeConfigSpec.BooleanValue SKILL_CAN_HURT_PLAYERS = BUILDER
-            .comment("Whether weapon skills can deal damage to players")
+            .comment("技能是否可以对玩家造成伤害（关闭后：技能仅对怪物生效）")
             .define("skillCanHurtPlayers", true);
 //
 //    // a list of strings that are treated as resource locations for items
