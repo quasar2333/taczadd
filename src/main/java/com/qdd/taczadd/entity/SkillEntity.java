@@ -6,9 +6,11 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import com.qdd.taczadd.Config;
 import com.tacz.guns.api.event.common.EntityHurtByGunEvent;
 import com.tacz.guns.api.event.common.EntityKillByGunEvent;
 import com.tacz.guns.entity.EntityKineticBullet;
@@ -41,6 +43,9 @@ public abstract class SkillEntity extends Projectile {
     protected abstract EntityKineticBullet getkb();
 
     public boolean canskill(Entity entity){
+        if (!Config.skillCanHurtPlayers && entity instanceof Player) {
+            return false;
+        }
         return entity.isAlive()&&entity!=getOwner();
     }
 

@@ -10,6 +10,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.*;
+import com.qdd.taczadd.Config;
 import com.qdd.taczadd.sound.ModSounds;
 import com.tacz.guns.entity.EntityKineticBullet;
 import com.tacz.guns.util.EntityUtil;
@@ -96,7 +97,9 @@ public class BigDragonEntity extends SkillEntity implements GeoEntity {
                     this.getBoundingBox().inflate(3.0D, 1.5D, 3.0D),
                     this::canskill).forEach(e->{
                         skill(e,5); // 500%伤害
-                        e.knockback(1.5f, -Math.cos(Math.toRadians(this.getYRot())), -Math.sin(Math.toRadians(this.getYRot())));
+                        if (Config.skillKnockbackEnabled) {
+                            e.knockback(1.5f, -Math.cos(Math.toRadians(this.getYRot())), -Math.sin(Math.toRadians(this.getYRot())));
+                        }
             }
             );
         }
@@ -110,10 +113,12 @@ public class BigDragonEntity extends SkillEntity implements GeoEntity {
                     this.getBoundingBox().inflate(3.0D, 1.5D, 3.0D),
                     this::canskill).forEach(e->{
                         skill(e,8f); // 800%伤害
-                        float l = e.distanceTo(this);
-                        double x=e.getX()-getX();
-                        double z=e.getZ()-getZ();
-                        e.setDeltaMovement(e.getDeltaMovement().add(x/l/2,0.5,z/l/2));
+                        if (Config.skillKnockbackEnabled) {
+                            float l = e.distanceTo(this);
+                            double x=e.getX()-getX();
+                            double z=e.getZ()-getZ();
+                            e.setDeltaMovement(e.getDeltaMovement().add(x/l/2,0.5,z/l/2));
+                        }
                     }
             );
         }
@@ -124,10 +129,12 @@ public class BigDragonEntity extends SkillEntity implements GeoEntity {
                     this::canskill).forEach(e->{
                         level().addParticle(ParticleTypes.EXPLOSION, e.getX(), e.getY(), e.getZ(), 0, 0.1, 0);
                         level().addParticle(ParticleTypes.EXPLOSION_EMITTER, e.getX(), e.getY(), e.getZ(), 0, 0.1, 0);
-                        float l = e.distanceTo(this);
-                        double x=e.getX()-getX();
-                        double z=e.getZ()-getZ();
-                        e.setDeltaMovement(e.getDeltaMovement().add(x/l/2,0.5,z/l/2));
+                        if (Config.skillKnockbackEnabled) {
+                            float l = e.distanceTo(this);
+                            double x=e.getX()-getX();
+                            double z=e.getZ()-getZ();
+                            e.setDeltaMovement(e.getDeltaMovement().add(x/l/2,0.5,z/l/2));
+                        }
                         skill(e,0);
                     }
             );

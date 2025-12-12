@@ -8,6 +8,7 @@ import net.minecraft.world.item.enchantment.ProtectionEnchantment;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import com.qdd.taczadd.Config;
 import com.qdd.taczadd.sound.ModSounds;
 import com.tacz.guns.entity.EntityKineticBullet;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -67,10 +68,14 @@ public class GreatswordEntity extends SkillEntity implements GeoEntity {
                     new AABB(this.position().add(-4, -1, -4), this.position().add(4, 1, 4)),
                     this::canskill).forEach(e->{
                             skill(e);
-                            float l = e.distanceTo(this);
-                            double x=e.getX()-getX();
-                            double z=e.getZ()-getZ();
-                            e.setDeltaMovement(e.getDeltaMovement().add(x/l,1,z/l));
+                            if (Config.skillKnockbackEnabled) {
+                                float l = e.distanceTo(this);
+                                if (l > 0.0001f) {
+                                    double x=e.getX()-getX();
+                                    double z=e.getZ()-getZ();
+                                    e.setDeltaMovement(e.getDeltaMovement().add(x/l,1,z/l));
+                                }
+                            }
 
                     }
             );

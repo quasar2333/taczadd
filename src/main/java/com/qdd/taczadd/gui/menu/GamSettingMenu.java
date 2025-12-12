@@ -67,7 +67,17 @@ public class GamSettingMenu extends AbstractContainerMenu {
             ItemStack stack=getItemStack();
             if (!stack.isEmpty()) {
                 if (stack.getOrCreateTag().getIntArray("gamholes").length==0) {
-                    stack.getOrCreateTag().putIntArray("gamholes", new int[]{0, -1, -1, -1, -1});
+                    if (stack.getItem() instanceof ArmorItem armor) {
+                        if (armor.getEquipmentSlot() == net.minecraft.world.entity.EquipmentSlot.CHEST) {
+                            stack.getOrCreateTag().putIntArray("gamholes", new int[]{0, 1, -1, -1, 4});
+                        } else if (armor.getEquipmentSlot() == net.minecraft.world.entity.EquipmentSlot.LEGS) {
+                            stack.getOrCreateTag().putIntArray("gamholes", new int[]{0, -1, -1, 3, -1});
+                        } else {
+                            stack.getOrCreateTag().putIntArray("gamholes", new int[]{0, -1, -1, -1, -1});
+                        }
+                    } else {
+                        stack.getOrCreateTag().putIntArray("gamholes", new int[]{0, -1, -1, -1, -1});
+                    }
                 }
                 // 从 NBT 备份恢复宝石数据到 capability (Mohist 兼容)
                 restoreGemsFromNBT(stack);

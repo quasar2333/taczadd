@@ -9,6 +9,7 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import com.qdd.taczadd.Config;
 import com.qdd.taczadd.effect.ModEffect;
 import com.qdd.taczadd.handler.AmmocCount;
 import com.qdd.taczadd.handler.GunSkill;
@@ -81,7 +82,9 @@ public abstract class mixinEntityKineticBullet  extends Projectile {
         }
         if (gunItem.getOrCreateTag().getCompound("GemEffects").getFloat("firepower_suppression")>0){
             if(gunItem.getOrCreateTag().getInt("ammocount")%3==0&&result.getEntity() instanceof LivingEntity living){
-                living.knockback(1,this.getDeltaMovement().x,this.getDeltaMovement().z);
+                if (Config.skillKnockbackEnabled) {
+                    living.knockback(1,this.getDeltaMovement().x,this.getDeltaMovement().z);
+                }
             }
         }
         AmmocCount ac=new AmmocCount(gunItem);

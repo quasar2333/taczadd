@@ -1,6 +1,7 @@
 package com.qdd.taczadd.gui;
 
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemStack;
 import com.qdd.taczadd.item.GamItem;
@@ -8,6 +9,7 @@ import com.qdd.taczadd.item.ModItems;
 import com.tacz.guns.api.item.gun.AbstractGunItem;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
 
@@ -25,11 +27,33 @@ public class gamslot extends SlotItemHandler {
     }
     @Override
     public boolean isHighlightable() {
-        return !stack.isEmpty()&&stack.getOrCreateTag().getIntArray("gamholes")[this.getSlotIndex()]!=-1;
+        if (stack.isEmpty()) return false;
+        int[] holes = stack.getOrCreateTag().getIntArray("gamholes");
+        return isAllowedSlotForEquipOrHasItem() && holes.length > this.getSlotIndex() && holes[this.getSlotIndex()] != -1;
+    }
+
+    private boolean isAllowedSlotForEquipOrHasItem() {
+        if (stack.isEmpty()) return false;
+        if (stack.getItem() instanceof ArmorItem ai && ai.getEquipmentSlot().isArmor()) {
+            boolean allowed;
+            if (ai.getEquipmentSlot() == EquipmentSlot.CHEST) {
+                allowed = this.getSlotIndex() == 0 || this.getSlotIndex() == 1 || this.getSlotIndex() == 4;
+            } else if (ai.getEquipmentSlot() == EquipmentSlot.LEGS) {
+                allowed = this.getSlotIndex() == 0 || this.getSlotIndex() == 3;
+            } else {
+                allowed = true;
+            }
+            if (!allowed) {
+                return !getItemHandler().getStackInSlot(getSlotIndex()).isEmpty();
+            }
+            return true;
+        }
+        return true;
     }
 
     @Override
     public boolean mayPlace(@NotNull ItemStack gam){
+        if (!isAllowedSlotForEquipOrHasItem()) return false;
         long gamnum=Arrays.stream(stack.getOrCreateTag().getIntArray("gamholes"))
                 .filter(num -> num == -1)
                 .count();
@@ -46,6 +70,34 @@ public class gamslot extends SlotItemHandler {
         return (gam.getItem() instanceof GamItem gi &&gi.getType()==(stack.getItem() instanceof AbstractGunItem? GamItem.type.GUN: GamItem.type.ARMOR))
                 &&isHighlightable()&&gam.getOrCreateTag().getBoolean("identify")&&(!gi.isBig()&&this.getSlotIndex()!=4||gi.isBig()&&this.getSlotIndex()==4)
                 ||b;
+    }
+
+    @Override
+    public boolean mayPickup(Player player) {
+        return isAllowedSlotForEquipOrHasItem() && super.mayPickup(player);
+    }
+
+    @Override
+    public void set(@NotNull ItemStack stackIn) {
+        IItemHandler handler = getItemHandler();
+        if (handler instanceof IItemHandlerModifiable mod) {
+            mod.setStackInSlot(getSlotIndex(), stackIn);
+            this.setChanged();
+            return;
+        }
+        handler.extractItem(getSlotIndex(), Integer.MAX_VALUE, false);
+        handler.insertItem(getSlotIndex(), stackIn, false);
+        this.setChanged();
+    }
+
+    @Override
+    public @NotNull ItemStack remove(int amount) {
+        IItemHandler handler = getItemHandler();
+        ItemStack extracted = handler.extractItem(getSlotIndex(), amount, false);
+        if (!extracted.isEmpty()) {
+            this.setChanged();
+        }
+        return extracted;
     }
 
     @Override

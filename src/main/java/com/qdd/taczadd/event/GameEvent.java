@@ -83,16 +83,7 @@ public class GameEvent {
     public static void itemAttachCapabilities(AttachCapabilitiesEvent<ItemStack> event) {
         Item item = event.getObject().getItem();
         if (item instanceof ArmorItem) {
-            ResourceLocation key = ForgeRegistries.ITEMS.getKey(item);
-            if (key != null && "lrarmor".equals(key.getNamespace())) {
-                String path = key.getPath();
-                if (path.startsWith("chemical_protective_") ||
-                    path.startsWith("armored_chemical_") ||
-                    path.startsWith("attacker_") ||
-                    path.startsWith("defender_")) {
-                    event.addCapability(new ResourceLocation(Taczadd.MODID, "gam"), new GamCap());
-                }
-            }
+            event.addCapability(new ResourceLocation(Taczadd.MODID, "gam"), new GamCap());
         } else if (item instanceof AbstractGunItem) {
             event.addCapability(new ResourceLocation(Taczadd.MODID, "gam"), new GamCap());
         }

@@ -7,6 +7,7 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import com.qdd.taczadd.Config;
 import com.qdd.taczadd.sound.ModSounds;
 import com.tacz.guns.entity.EntityKineticBullet;
 import software.bernie.geckolib.animatable.GeoEntity;
@@ -79,11 +80,13 @@ public class PozhanzheSkillEntity extends SkillEntity implements GeoEntity {
                             entity.getX(), entity.getY() + 1, entity.getZ(), 0, 0.1, 0);
                         
                         // Knockback effect
-                        float distance = entity.distanceTo(this);
-                        if (distance > 0) {
-                            double x = entity.getX() - getX();
-                            double z = entity.getZ() - getZ();
-                            entity.setDeltaMovement(entity.getDeltaMovement().add(x / distance / 2, 0.3, z / distance / 2));
+                        if (Config.skillKnockbackEnabled) {
+                            float distance = entity.distanceTo(this);
+                            if (distance > 0) {
+                                double x = entity.getX() - getX();
+                                double z = entity.getZ() - getZ();
+                                entity.setDeltaMovement(entity.getDeltaMovement().add(x / distance / 2, 0.3, z / distance / 2));
+                            }
                         }
                     });
         }

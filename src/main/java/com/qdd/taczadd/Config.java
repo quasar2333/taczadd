@@ -30,6 +30,14 @@ public class Config
     public static final ForgeConfigSpec.ConfigValue<String> PASSWORD = BUILDER
             .comment("password")
             .define("password", "");
+
+    public static final ForgeConfigSpec.BooleanValue SKILL_KNOCKBACK_ENABLED = BUILDER
+            .comment("Whether weapon skills apply knockback / launch effects")
+            .define("skillKnockbackEnabled", true);
+
+    public static final ForgeConfigSpec.BooleanValue SKILL_CAN_HURT_PLAYERS = BUILDER
+            .comment("Whether weapon skills can deal damage to players")
+            .define("skillCanHurtPlayers", true);
 //
 //    // a list of strings that are treated as resource locations for items
 //    private static final ForgeConfigSpec.ConfigValue<List<? extends String>> ITEM_STRINGS = BUILDER
@@ -41,6 +49,8 @@ public class Config
 //    public static boolean logDirtBlock;
 //    public static int magicNumber;
     public static String password;
+    public static boolean skillKnockbackEnabled;
+    public static boolean skillCanHurtPlayers;
 //    public static Set<Item> items;
 
 //    private static boolean validateItemName(final Object obj)
@@ -54,6 +64,8 @@ public class Config
 //        logDirtBlock = LOG_DIRT_BLOCK.get();
 //        magicNumber = MAGIC_NUMBER.get();
         password = PASSWORD.get();
+        skillKnockbackEnabled = SKILL_KNOCKBACK_ENABLED.get();
+        skillCanHurtPlayers = SKILL_CAN_HURT_PLAYERS.get();
 //
 //        // convert the list of strings into a set of items
 //        items = ITEM_STRINGS.get().stream()
