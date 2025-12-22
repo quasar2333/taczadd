@@ -27,6 +27,30 @@ public class GamSettingMenu extends AbstractContainerMenu {
     private final Container ItemSlots = new SimpleContainer(1);
     private final ItemStackHandler ish=new ItemStackHandler(5);
 
+    private int[] ensureGamholes(ItemStack stack) {
+        if (stack.isEmpty()) {
+            return new int[0];
+        }
+        int[] holes = stack.getOrCreateTag().getIntArray("gamholes");
+        if (holes.length == 5) {
+            return holes;
+        }
+        int[] fixed;
+        if (stack.getItem() instanceof ArmorItem armor) {
+            if (armor.getEquipmentSlot() == net.minecraft.world.entity.EquipmentSlot.CHEST) {
+                fixed = new int[]{0, 1, -1, -1, 4};
+            } else if (armor.getEquipmentSlot() == net.minecraft.world.entity.EquipmentSlot.LEGS) {
+                fixed = new int[]{0, -1, -1, 3, -1};
+            } else {
+                fixed = new int[]{0, -1, -1, -1, -1};
+            }
+        } else {
+            fixed = new int[]{0, -1, -1, -1, -1};
+        }
+        stack.getOrCreateTag().putIntArray("gamholes", fixed);
+        return fixed;
+    }
+
     public GamSettingMenu(int pContainerId, Inventory inv, FriendlyByteBuf extraData) {
         this(pContainerId, inv,new SimpleContainerData(0));
     }
@@ -66,19 +90,7 @@ public class GamSettingMenu extends AbstractContainerMenu {
         if (container==this.ItemSlots){
             ItemStack stack=getItemStack();
             if (!stack.isEmpty()) {
-                if (stack.getOrCreateTag().getIntArray("gamholes").length==0) {
-                    if (stack.getItem() instanceof ArmorItem armor) {
-                        if (armor.getEquipmentSlot() == net.minecraft.world.entity.EquipmentSlot.CHEST) {
-                            stack.getOrCreateTag().putIntArray("gamholes", new int[]{0, 1, -1, -1, 4});
-                        } else if (armor.getEquipmentSlot() == net.minecraft.world.entity.EquipmentSlot.LEGS) {
-                            stack.getOrCreateTag().putIntArray("gamholes", new int[]{0, -1, -1, 3, -1});
-                        } else {
-                            stack.getOrCreateTag().putIntArray("gamholes", new int[]{0, -1, -1, -1, -1});
-                        }
-                    } else {
-                        stack.getOrCreateTag().putIntArray("gamholes", new int[]{0, -1, -1, -1, -1});
-                    }
-                }
+                ensureGamholes(stack);
                 // 从 NBT 备份恢复宝石数据到 capability (Mohist 兼容)
                 restoreGemsFromNBT(stack);
             }
@@ -177,10 +189,16 @@ public class GamSettingMenu extends AbstractContainerMenu {
                 super.clicked(slot, p_150401_, p_150402_, p_150403_);
             } else if (slot > 36) {
                 if (itemstack10.getItem()==ModItems.BreakGam.get()&&slot7.mayPlace(itemstack10)){
-                    int [] gamholes=getItemStack().getOrCreateTag().getIntArray("gamholes");
-                    gamholes[slot7.getSlotIndex()]=slot7.getSlotIndex();
-                    getItemStack().getOrCreateTag().putIntArray("gamholes",gamholes);
-                    itemstack10.shrink(1);
+                    ItemStack stack = getItemStack();
+                    if (!stack.isEmpty()) {
+                        int [] gamholes = ensureGamholes(stack);
+                        int idx = slot7.getSlotIndex();
+                        if (idx >= 0 && idx < gamholes.length) {
+                            gamholes[idx] = idx;
+                            stack.getOrCreateTag().putIntArray("gamholes", gamholes);
+                            itemstack10.shrink(1);
+                        }
+                    }
                     return;
                 }
                 super.clicked(slot, p_150401_, p_150402_, p_150403_);

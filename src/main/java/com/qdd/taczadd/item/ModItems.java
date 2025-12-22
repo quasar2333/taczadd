@@ -78,19 +78,19 @@ public class ModItems {
             () -> new FirepowerSuppressionGam(new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<Item> GlassCannon=ITEMS.register("glass_cannon_gem",
-            () -> new GlassCannonGam(new Item.Properties()));
+            () -> new GlassCannonGam(new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<Item> RoyalGift=ITEMS.register("royal_gift_gem",
-            () -> new RoyalGiftGam(new Item.Properties()));
+            () -> new RoyalGiftGam(new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<Item> GloriousEmblem=ITEMS.register("glorious_emblem_gem",
-            () -> new GloriousEmblemGam(new Item.Properties()));
+            () -> new GloriousEmblemGam(new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<Item> HeavyWarrior=ITEMS.register("heavy_warrior_gem",
-            () -> new HeavyWarriorGam(new Item.Properties()));
+            () -> new HeavyWarriorGam(new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<Item> ThornCurse=ITEMS.register("thorn_curse_gem",
-            () -> new ThornCurseGam(new Item.Properties()));
+            () -> new ThornCurseGam(new Item.Properties().stacksTo(1)));
 
     public static final RegistryObject<Item> LowGun=ITEMS.register("low_gun_crystal",
             () -> new ReinforcedCrystal(new Item.Properties(), ReinforcedCrystal.Type.Gun, ReinforcedCrystal.Rank.Low));

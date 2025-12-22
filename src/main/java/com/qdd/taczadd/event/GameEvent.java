@@ -24,6 +24,7 @@ import com.qdd.taczadd.Taczadd;
 import com.qdd.taczadd.cap.GamCap;
 import com.qdd.taczadd.cap.PlayerCapProvider;
 import com.qdd.taczadd.command.DPSCommand;
+import com.qdd.taczadd.command.TaczaddCommand;
 import com.qdd.taczadd.effect.ModEffect;
 import com.qdd.taczadd.handler.*;
 import com.qdd.taczadd.item.Attributes.ModAttributes;
@@ -443,5 +444,6 @@ public class GameEvent {
     @SubscribeEvent
     public static void registerCommands(RegisterCommandsEvent event) {
         DPSCommand.register(event.getDispatcher());
+        TaczaddCommand.register(event.getDispatcher());
     }
 }

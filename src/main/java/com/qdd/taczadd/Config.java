@@ -11,6 +11,12 @@ import net.minecraftforge.registries.ForgeRegistries;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+import java.io.UncheckedIOException;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+
+import com.electronwill.nightconfig.core.file.CommentedFileConfig;
 
 // An example config class. This is not required, but it's a good idea to have one to keep your config organized.
 // Demonstrates how to use Forge's config APIs
@@ -44,7 +50,8 @@ public class Config
 //            .comment("A list of items to log on common setup.")
 //            .defineListAllowEmpty("items", List.of("minecraft:iron_ingot"), Config::validateItemName);
 
-    static final ForgeConfigSpec SPEC = BUILDER.build();
+    public static final String CONFIG_FILE_NAME = "taczadd-common.toml";
+    public static final ForgeConfigSpec SPEC = BUILDER.build();
 
 //    public static boolean logDirtBlock;
 //    public static int magicNumber;
@@ -59,17 +66,44 @@ public class Config
 //    }
 
     @SubscribeEvent
-    static void onLoad(final ModConfigEvent event)
+    static void onLoad(final ModConfigEvent.Loading event)
     {
+        if (event.getConfig() == null || event.getConfig().getSpec() != SPEC) {
+            return;
+        }
 //        logDirtBlock = LOG_DIRT_BLOCK.get();
 //        magicNumber = MAGIC_NUMBER.get();
-        password = PASSWORD.get();
-        skillKnockbackEnabled = SKILL_KNOCKBACK_ENABLED.get();
-        skillCanHurtPlayers = SKILL_CAN_HURT_PLAYERS.get();
+        bake();
 //
 //        // convert the list of strings into a set of items
 //        items = ITEM_STRINGS.get().stream()
 //                .map(itemName -> ForgeRegistries.ITEMS.getValue(new ResourceLocation(itemName)))
 //                .collect(Collectors.toSet());
+    }
+
+    public static void bake() {
+        password = PASSWORD.get();
+        skillKnockbackEnabled = SKILL_KNOCKBACK_ENABLED.get();
+        skillCanHurtPlayers = SKILL_CAN_HURT_PLAYERS.get();
+    }
+
+    public static void reloadFromDisk(Path configFile) {
+        try {
+            Files.createDirectories(configFile.getParent());
+            if (!Files.exists(configFile)) {
+                Files.createFile(configFile);
+            }
+        } catch (IOException e) {
+            throw new UncheckedIOException(e);
+        }
+
+        CommentedFileConfig fileConfig = CommentedFileConfig.builder(configFile)
+                .sync()
+                .autosave()
+                .build();
+        fileConfig.load();
+        SPEC.setConfig(fileConfig);
+        bake();
+        fileConfig.close();
     }
 }

@@ -83,7 +83,7 @@ public class Taczadd
         modEventBus.addListener(this::addCreative);
 
         // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
-        context.registerConfig(ModConfig.Type.COMMON, Config.SPEC);
+        context.registerConfig(ModConfig.Type.COMMON, Config.SPEC, Config.CONFIG_FILE_NAME);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event)
