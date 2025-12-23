@@ -413,9 +413,26 @@ A: 按住 **Shift** 键查看物品，可以看到完整的属性面板，包括
 
 ## 版本信息
 
-- **模组版本**：1.0.7
+- **模组版本**：1.0.9
 - **作者**：ultimate_kevin
 - **游戏版本**：Minecraft 1.20.1
+
+---
+
+## 更新日志
+
+### v1.0.9
+- **修复**: 配置文件生成问题（将配置类型从 SERVER 改回 COMMON）
+- **优化**: 增强宝石效果系统的鲁棒性
+  - 修复 `GamHandler.applygam()` 中宝石效果值为0时中断整个方法的问题
+  - 所有读取 `GemEffects` 的代码增加自动恢复机制
+  - 影响文件：`GameEvent.java`、`mixinEntityKineticBullet.java`、`mixinGunData.java`、`mixinLivingEntityReload.java`
+- **修复**: 宝石加成偶尔不显示（显示 0.0%）的问题
+- **优化**: 部分宝石物品添加堆叠限制 `.stacksTo(1)`
+
+### v1.0.8
+- 添加 `TaczaddCommand` 命令支持
+- 修复 `GamSettingMenu` 中数组越界问题（添加 `ensureGamholes()` 方法）
 
 ---
 

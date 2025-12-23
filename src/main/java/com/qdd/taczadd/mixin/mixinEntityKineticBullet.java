@@ -9,9 +9,11 @@ import net.minecraft.world.entity.projectile.Projectile;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
+import net.minecraft.nbt.CompoundTag;
 import com.qdd.taczadd.Config;
 import com.qdd.taczadd.effect.ModEffect;
 import com.qdd.taczadd.handler.AmmocCount;
+import com.qdd.taczadd.handler.GamHandler;
 import com.qdd.taczadd.handler.GunSkill;
 import com.qdd.taczadd.item.Attributes.ModAttributes;
 import com.tacz.guns.entity.EntityKineticBullet;
@@ -48,17 +50,25 @@ public abstract class mixinEntityKineticBullet  extends Projectile {
     @Inject(method = "<init>(Lnet/minecraft/world/entity/EntityType;Lnet/minecraft/world/level/Level;Lnet/minecraft/world/entity/LivingEntity;Lnet/minecraft/world/item/ItemStack;Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/resources/ResourceLocation;Lnet/minecraft/resources/ResourceLocation;ZLcom/tacz/guns/resource/pojo/data/gun/GunData;Lcom/tacz/guns/resource/pojo/data/gun/BulletData;)V",at = @At("TAIL"),remap = false)
     public void init(EntityType type, Level worldIn, LivingEntity throwerIn, ItemStack gunItem, ResourceLocation ammoId, ResourceLocation gunId, ResourceLocation gunDisplayId, boolean isTracerAmmo, GunData gunData, BulletData bulletData, CallbackInfo ci){
         this.gunItem=gunItem;
-        this.armorIgnore+=gunItem.getOrCreateTag().getCompound("GemEffects").getFloat("armorIgnore");
+        // 增强鲁棒性：确保 GemEffects 存在
+        CompoundTag gemEffects = gunItem.getOrCreateTag().getCompound("GemEffects");
+        if (gemEffects.isEmpty() && !GamHandler.getGams(gunItem).isEmpty()) {
+            try {
+                GamHandler.applygam(gunItem);
+                gemEffects = gunItem.getOrCreateTag().getCompound("GemEffects");
+            } catch (Exception ignored) {}
+        }
+        this.armorIgnore+=gemEffects.getFloat("armorIgnore");
         if (throwerIn.getAttribute(ModAttributes.armorIgnore.get())!=null) {
             this.armorIgnore += (float) throwerIn.getAttribute(ModAttributes.armorIgnore.get()).getValue();
         }
         this.armorIgnore=Math.max(this.armorIgnore,1);
-        float gem = gunItem.getOrCreateTag().getCompound("GemEffects").getFloat("damageModifier");
-        float crt=gunItem.getOrCreateTag().getCompound("GemEffects").getFloat("CRT");
+        float gem = gemEffects.getFloat("damageModifier");
+        float crt=gemEffects.getFloat("CRT");
         if (throwerIn.hasEffect(ModEffect.AccurateShooterE.get())){
-            crt+=gunItem.getOrCreateTag().getCompound("GemEffects").getFloat("accurate_shooter");
+            crt+=gemEffects.getFloat("accurate_shooter");
         }
-        float cta=gunItem.getOrCreateTag().getCompound("GemEffects").getFloat("CTA")+1;
+        float cta=gemEffects.getFloat("CTA")+1;
         if (throwerIn.getAttribute(ModAttributes.CTA.get())!=null) {
             cta += (float) throwerIn.getAttribute(ModAttributes.CTA.get()).getValue();
         }
@@ -75,12 +85,20 @@ public abstract class mixinEntityKineticBullet  extends Projectile {
 
     @Inject(method = "onHitEntity",at = @At("HEAD"),remap = false, cancellable = true)
     public void monHitEntity(TacHitResult result, Vec3 startVec, Vec3 endVec, CallbackInfo ci){
-        if (gunItem.getOrCreateTag().getCompound("GemEffects").getFloat("battlefield_physician")==1&&result.getEntity() instanceof Player pattener &&this.getOwner() instanceof Player player){
+        // 增强鲁棒性：确保 GemEffects 存在
+        CompoundTag gemEffects = gunItem.getOrCreateTag().getCompound("GemEffects");
+        if (gemEffects.isEmpty() && !GamHandler.getGams(gunItem).isEmpty()) {
+            try {
+                GamHandler.applygam(gunItem);
+                gemEffects = gunItem.getOrCreateTag().getCompound("GemEffects");
+            } catch (Exception ignored) {}
+        }
+        if (gemEffects.getFloat("battlefield_physician")==1&&result.getEntity() instanceof Player pattener &&this.getOwner() instanceof Player player){
             pattener.heal(1);
             player.heal(1);
             ci.cancel();
         }
-        if (gunItem.getOrCreateTag().getCompound("GemEffects").getFloat("firepower_suppression")>0){
+        if (gemEffects.getFloat("firepower_suppression")>0){
             if(gunItem.getOrCreateTag().getInt("ammocount")%3==0&&result.getEntity() instanceof LivingEntity living){
                 if (Config.skillKnockbackEnabled) {
                     living.knockback(1,this.getDeltaMovement().x,this.getDeltaMovement().z);

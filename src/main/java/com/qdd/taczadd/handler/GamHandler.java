@@ -100,7 +100,7 @@ public class GamHandler {
         getGams(stack).forEach(stack1 -> list.add(((GamItem)stack1.getItem()).getEffct(stack1)));
         Map<String, Float> resultMap=new HashMap<>();
         for (Pair<String,Float> p :list){
-            if (p.getSecond()==0)return;
+            if (p.getSecond()==0) continue;
             resultMap.merge(
                     p.getFirst(),
                     p.getSecond(),

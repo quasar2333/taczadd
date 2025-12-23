@@ -1,9 +1,11 @@
 package com.qdd.taczadd.mixin;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import com.qdd.taczadd.handler.GamHandler;
 import com.tacz.guns.api.TimelessAPI;
 import com.tacz.guns.api.entity.IGunOperator;
 import com.tacz.guns.api.entity.ReloadState;
@@ -68,7 +70,15 @@ public class mixinLivingEntityReload {
                                                     this.data.reloadStateType = ReloadState.StateType.TACTICAL_RELOAD_FEEDING;
                                                 }
                                                 this.data.reloadTimestamp = System.currentTimeMillis();
-                                                float r=currentGunItem.getOrCreateTag().getCompound("GemEffects").getFloat("reloadgam");
+                                                // 增强鲁棒性：确保 GemEffects 存在
+                                                CompoundTag gemEffects = currentGunItem.getOrCreateTag().getCompound("GemEffects");
+                                                if (gemEffects.isEmpty() && !GamHandler.getGams(currentGunItem).isEmpty()) {
+                                                    try {
+                                                        GamHandler.applygam(currentGunItem);
+                                                        gemEffects = currentGunItem.getOrCreateTag().getCompound("GemEffects");
+                                                    } catch (Exception ignored) {}
+                                                }
+                                                float r=gemEffects.getFloat("reloadgam");
                                                 if (r>0){
                                                     this.data.reloadTimestamp -= (long) (gunIndex.getGunData().getReloadData().getCooldown().getTacticalTime()*1000/(1+r));
                                                     this.shooter.setHealth((float) (this.shooter.getHealth()- this.shooter.getMaxHealth()*0.1));

@@ -20,6 +20,7 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.nbt.CompoundTag;
 import com.qdd.taczadd.Taczadd;
 import com.qdd.taczadd.cap.GamCap;
 import com.qdd.taczadd.cap.PlayerCapProvider;
@@ -56,13 +57,21 @@ public class GameEvent {
     public static void onShootEven(GunShootEvent event){
         ItemStack itemStack=event.getGunItemStack();
         if (itemStack.getItem() instanceof AbstractGunItem gunItem) {
-            if(itemStack.getOrCreateTag().getCompound("GemEffects").getFloat("accurate_shooter")>event.getShooter().getRandom().nextFloat()){
+            // 增强鲁棒性：确保 GemEffects 存在
+            CompoundTag gemEffects = itemStack.getOrCreateTag().getCompound("GemEffects");
+            if (gemEffects.isEmpty() && !GamHandler.getGams(itemStack).isEmpty()) {
+                try {
+                    GamHandler.applygam(itemStack);
+                    gemEffects = itemStack.getOrCreateTag().getCompound("GemEffects");
+                } catch (Exception ignored) {}
+            }
+            if(gemEffects.getFloat("accurate_shooter")>event.getShooter().getRandom().nextFloat()){
                 event.getShooter().addEffect(new MobEffectInstance(ModEffect.AccurateShooterE.get(),100));
             }
-            if (itemStack.getOrCreateTag().getCompound("GemEffects").getFloat("critical_hit")>event.getShooter().getRandom().nextFloat()){
+            if (gemEffects.getFloat("critical_hit")>event.getShooter().getRandom().nextFloat()){
                 event.getShooter().addEffect(new MobEffectInstance(ModEffect.CriticalHitE.get(),20));
             }
-            if (itemStack.getOrCreateTag().getCompound("GemEffects").getFloat("infinite_firepower")>event.getShooter().getRandom().nextFloat()){
+            if (gemEffects.getFloat("infinite_firepower")>event.getShooter().getRandom().nextFloat()){
                 event.getShooter().addEffect(new MobEffectInstance(ModEffect.InfiniteFirepowerE.get(),120));
             }
             ResourceLocation gunId = gunItem.getGunId(itemStack);
@@ -137,7 +146,15 @@ public class GameEvent {
             if (stack.getItem() instanceof AbstractGunItem) {
                 Player viewer = event.getEntity();
                 if (viewer == null) viewer = net.minecraft.client.Minecraft.getInstance().player; // client-side fallback
-                float gem = stack.getOrCreateTag().getCompound("GemEffects").getFloat("damageModifier");
+                // 增强鲁棒性：如果 GemEffects 不存在或为空，尝试重新计算
+                CompoundTag gemEffects = stack.getOrCreateTag().getCompound("GemEffects");
+                if (gemEffects.isEmpty() && !GamHandler.getGams(stack).isEmpty()) {
+                    try {
+                        GamHandler.applygam(stack);
+                        gemEffects = stack.getOrCreateTag().getCompound("GemEffects");
+                    } catch (Exception ignored) {}
+                }
+                float gem = gemEffects.getFloat("damageModifier");
                 float gunReinf = stack.getOrCreateTag().getFloat("damagebase");
                 float skill = stack.getOrCreateTag().getFloat("multiple");
                 float equipPart = 0.0f;
@@ -253,15 +270,23 @@ public class GameEvent {
 
     @SubscribeEvent
     public static void onGunKill(EntityKillByGunEvent event){
+        ItemStack gun = event.getAttacker().getMainHandItem();
+        // 增强鲁棒性：确保 GemEffects 存在
+        CompoundTag gemEffects = gun.getOrCreateTag().getCompound("GemEffects");
+        if (gemEffects.isEmpty() && !GamHandler.getGams(gun).isEmpty()) {
+            try {
+                GamHandler.applygam(gun);
+                gemEffects = gun.getOrCreateTag().getCompound("GemEffects");
+            } catch (Exception ignored) {}
+        }
         // Field Commander party buffs on kill
-        if (event.getAttacker().getMainHandItem().getOrCreateTag().getCompound("GemEffects").getFloat("field_commander")>0){
+        if (gemEffects.getFloat("field_commander")>0){
             event.getAttacker().level().getEntitiesOfClass(Player.class, event.getAttacker().getBoundingBox().inflate(15)).forEach(player -> {
                 player.addEffect(new MobEffectInstance(MobEffects.JUMP,60,2));
                 player.addEffect(new MobEffectInstance(MobEffects.REGENERATION,60,2));
             });
         }
         // Increment gun kill counter (stored on the attacking gun's NBT)
-        ItemStack gun = event.getAttacker().getMainHandItem();
         if (gun.getItem() instanceof AbstractGunItem) {
             int kills = gun.getOrCreateTag().getInt("gun_kills");
             gun.getOrCreateTag().putInt("gun_kills", kills + 1);
@@ -283,7 +308,16 @@ public class GameEvent {
         AttributeInstance attributeinstance = event.player.getAttribute(Attributes.MAX_HEALTH);
         if (attributeinstance != null&& !ItemStack.matches(event.player.lastItemInMainHand, event.player.getMainHandItem())) {
             attributeinstance.removeModifier(HealthModifierUUID);
-            attributeinstance.addTransientModifier(new AttributeModifier(HealthModifierUUID, "Health Modifier", event.player.getMainHandItem().getOrCreateTag().getCompound("GemEffects").getFloat("health_m"), AttributeModifier.Operation.MULTIPLY_BASE));
+            ItemStack mainHand = event.player.getMainHandItem();
+            // 增强鲁棒性：确保 GemEffects 存在
+            CompoundTag gemEffects = mainHand.getOrCreateTag().getCompound("GemEffects");
+            if (gemEffects.isEmpty() && !GamHandler.getGams(mainHand).isEmpty()) {
+                try {
+                    GamHandler.applygam(mainHand);
+                    gemEffects = mainHand.getOrCreateTag().getCompound("GemEffects");
+                } catch (Exception ignored) {}
+            }
+            attributeinstance.addTransientModifier(new AttributeModifier(HealthModifierUUID, "Health Modifier", gemEffects.getFloat("health_m"), AttributeModifier.Operation.MULTIPLY_BASE));
         }
     }
     @SubscribeEvent
