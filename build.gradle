@@ -1,3 +1,13 @@
+// ProGuard 混淆器配置
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.guardsquare:proguard-gradle:7.4.2'
+    }
+}
+
 plugins {
     id 'eclipse'
     id 'idea'
@@ -245,3 +255,96 @@ publishing {
 tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8' // Use the UTF-8 charset for Java compilation
 }
+
+// ProGuard 混淆任务
+import proguard.gradle.ProGuardTask
+
+task proguard(type: ProGuardTask, dependsOn: 'reobfJar') {
+    // 输入：reobf 后的 jar
+    injars tasks.jar.archiveFile
+    // 输出：混淆后的 jar
+    outjars layout.buildDirectory.file("libs/${project.name}-${project.version}-obfuscated.jar")
+    
+    // 库文件（不混淆）
+    libraryjars "${System.getProperty('java.home')}/jmods/java.base.jmod", jarfilter: '!**.jar', filter: '!module-info.class'
+    libraryjars "${System.getProperty('java.home')}/jmods/java.desktop.jmod", jarfilter: '!**.jar', filter: '!module-info.class'
+    libraryjars "${System.getProperty('java.home')}/jmods/java.logging.jmod", jarfilter: '!**.jar', filter: '!module-info.class'
+    
+    // 保留选项
+    // 保留 mod 主类
+    keep "public class com.qdd.taczadd.Taczadd { *; }"
+    
+    // 保留所有 @Mod 注解的类
+    keep "@net.minecraftforge.fml.common.Mod public class * { *; }"
+    
+    // 保留所有事件订阅方法
+    keepclassmembers "class * { @net.minecraftforge.eventbus.api.SubscribeEvent *; }"
+    keepclassmembers "class * { @net.minecraftforge.api.distmarker.OnlyIn *; }"
+    
+    // 保留 Mixin 类
+    keep "@org.spongepowered.asm.mixin.Mixin class * { *; }"
+    
+    // 保留所有公共 API 类
+    keep "public class com.qdd.taczadd.** { public *; protected *; }"
+    
+    // 保留 Capability 相关类
+    keep "class * implements net.minecraftforge.common.capabilities.ICapabilitySerializable { *; }"
+    keep "class * implements net.minecraftforge.common.capabilities.ICapabilityProvider { *; }"
+    
+    // 保留注册表类
+    keep "class com.qdd.taczadd.item.ModItems { *; }"
+    keep "class com.qdd.taczadd.block.ModBlocks { *; }"
+    keep "class com.qdd.taczadd.entity.ModEntities { *; }"
+    keep "class com.qdd.taczadd.gui.ModMenus { *; }"
+    
+    // 保留 GUI 屏幕和菜单
+    keep "class * extends net.minecraft.client.gui.screens.Screen { *; }"
+    keep "class * extends net.minecraft.world.inventory.AbstractContainerMenu { *; }"
+    
+    // 保留序列化相关
+    keepclassmembers "class * implements java.io.Serializable { *; }"
+    
+    // 保留枚举
+    keepclassmembers "enum * { *; }"
+    
+    // 保留注解
+    keepattributes '*Annotation*'
+    keepattributes 'Signature'
+    keepattributes 'InnerClasses'
+    keepattributes 'EnclosingMethod'
+    keepattributes 'SourceFile'
+    keepattributes 'LineNumberTable'
+    
+    // 其他选项
+    dontoptimize  // 不优化（避免 Forge 兼容问题）
+    dontshrink    // 不移除未使用代码（Forge 可能反射调用）
+    // 注意：不要使用 dontpreverify，Java 7+ 需要 StackMapTable
+    
+    // 混淆字典（可选：使用更难读的名称）
+    // obfuscationdictionary 'proguard-dictionary.txt'
+    
+    // 忽略警告
+    dontwarn 'net.minecraft.**'
+    dontwarn 'com.mojang.**'
+    dontwarn 'net.minecraftforge.**'
+    dontwarn 'org.spongepowered.**'
+    dontwarn 'com.tacz.**'
+    dontwarn 'software.bernie.**'
+    dontwarn 'com.qdd.taczadd.**'  // 忽略 mod 内部的未解析引用警告
+    ignorewarnings  // 忽略所有警告继续处理
+    
+    verbose
+    printmapping layout.buildDirectory.file("proguard/mapping.txt")
+    
+    // 延迟添加 Minecraft 和 Forge 库（避免配置阶段解析依赖）
+    doFirst {
+        configurations.compileClasspath.files.each { file ->
+            libraryjars file, filter: '!META-INF/versions/**'
+        }
+    }
+}
+
+// 可选：让 build 任务自动执行混淆
+// tasks.named('build').configure {
+//     dependsOn 'proguard'
+// }

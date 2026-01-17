@@ -17,6 +17,7 @@ import java.util.Arrays;
 
 public class gamslot extends SlotItemHandler {
     ItemStack stack;
+    
     public gamslot(IItemHandler itemHandler, int index, int xPosition, int yPosition,ItemStack stack) {
         super(itemHandler, index, xPosition, yPosition);
         this.stack=stack;
@@ -24,6 +25,7 @@ public class gamslot extends SlotItemHandler {
 
     public void setStack(ItemStack stack) {
         this.stack = stack;
+        // GamCap 现在自动从 NBT 同步，不需要缓存
     }
     @Override
     public boolean isHighlightable() {
@@ -102,15 +104,13 @@ public class gamslot extends SlotItemHandler {
 
     @Override
     public IItemHandler getItemHandler(){
-        // 必须从装备的 capability 获取，不能回退到本地 handler，否则宝石会丢失
+        // GamCap 现在自动从 NBT 同步，每次获取都是最新数据
         if (stack.isEmpty()) {
             return super.getItemHandler();
         }
-        return stack.getCapability(ForgeCapabilities.ITEM_HANDLER).orElseGet(() -> {
-            // Mohist 等混合服务端可能有 capability 同步问题
-            // 强制重新获取 capability
-            return super.getItemHandler();
-        });
+        // 直接从 capability 获取，GamCap 会自动从 NBT 同步
+        return stack.getCapability(ForgeCapabilities.ITEM_HANDLER)
+                .orElseGet(super::getItemHandler);
     }
     
     @Override

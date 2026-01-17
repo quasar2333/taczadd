@@ -1,7 +1,5 @@
 package com.qdd.taczadd.gui.menu;
 
-import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.ListTag;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
@@ -17,7 +15,6 @@ import com.qdd.taczadd.item.GamItem;
 import com.qdd.taczadd.item.ModItems;
 import com.tacz.guns.api.item.gun.AbstractGunItem;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
 import java.lang.reflect.InvocationTargetException;
@@ -26,29 +23,47 @@ public class GamSettingMenu extends AbstractContainerMenu {
     private final ContainerData data;
     private final Container ItemSlots = new SimpleContainer(1);
     private final ItemStackHandler ish=new ItemStackHandler(5);
+    private ItemStack lastStack = ItemStack.EMPTY;
 
     private int[] ensureGamholes(ItemStack stack) {
         if (stack.isEmpty()) {
             return new int[0];
         }
         int[] holes = stack.getOrCreateTag().getIntArray("gamholes");
+        // 只有当数组长度不是 5 时才需要完全重置
         if (holes.length == 5) {
+            // 规范化数组：将非法值替换为合法值，但保留已解锁状态
+            boolean modified = false;
+            for (int i = 0; i < 5; i++) {
+                if (holes[i] != -1 && holes[i] != i) {
+                    // 如果值不是 -1 也不是索引，但是非负数，视为已解锁，规范化为索引值
+                    if (holes[i] >= 0) {
+                        holes[i] = i;
+                        modified = true;
+                    } else {
+                        // 其他负数视为锁定
+                        holes[i] = -1;
+                        modified = true;
+                    }
+                }
+            }
+            if (modified) {
+                stack.getOrCreateTag().putIntArray("gamholes", holes);
+            }
             return holes;
         }
-        int[] fixed;
-        if (stack.getItem() instanceof ArmorItem armor) {
-            if (armor.getEquipmentSlot() == net.minecraft.world.entity.EquipmentSlot.CHEST) {
-                fixed = new int[]{0, 1, -1, -1, 4};
-            } else if (armor.getEquipmentSlot() == net.minecraft.world.entity.EquipmentSlot.LEGS) {
-                fixed = new int[]{0, -1, -1, 3, -1};
-            } else {
-                fixed = new int[]{0, -1, -1, -1, -1};
-            }
-        } else {
-            fixed = new int[]{0, -1, -1, -1, -1};
-        }
+        int[] fixed = new int[]{-1, -1, -1, -1, -1};
         stack.getOrCreateTag().putIntArray("gamholes", fixed);
         return fixed;
+    }
+
+    private void syncGemStorage(ItemStack stack) {
+        if (stack.isEmpty()) return;
+        stack.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(handler -> {
+            if (handler instanceof ItemStackHandler ish) {
+                stack.getOrCreateTag().put("GemStorage", ish.serializeNBT());
+            }
+        });
     }
 
     public GamSettingMenu(int pContainerId, Inventory inv, FriendlyByteBuf extraData) {
@@ -89,11 +104,14 @@ public class GamSettingMenu extends AbstractContainerMenu {
     public void slotsChanged(Container container) {
         if (container==this.ItemSlots){
             ItemStack stack=getItemStack();
+            if (!lastStack.isEmpty() && lastStack != stack) {
+                syncGemStorage(lastStack);
+            }
             if (!stack.isEmpty()) {
                 ensureGamholes(stack);
-                // 从 NBT 备份恢复宝石数据到 capability (Mohist 兼容)
-                restoreGemsFromNBT(stack);
+                syncGemStorage(stack);
             }
+            lastStack = stack;
             ((gamslot)this.slots.get(37)).setStack(stack);
             ((gamslot)this.slots.get(38)).setStack(stack);
             ((gamslot)this.slots.get(39)).setStack(stack);
@@ -102,65 +120,15 @@ public class GamSettingMenu extends AbstractContainerMenu {
         }
         this.broadcastChanges();
     }
-    
-    /**
-     * 从 NBT 备份恢复宝石到 capability (用于 Mohist 等混合服务端兼容)
-     */
-    private void restoreGemsFromNBT(ItemStack stack) {
-        if (stack.isEmpty()) return;
-        CompoundTag tag = stack.getOrCreateTag();
-        if (!tag.contains("GemBackup", 9)) return; // 没有备份数据
-        
-        stack.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(handler -> {
-            ListTag backup = tag.getList("GemBackup", 10);
-            // 检查 capability 是否为空，如果为空则从备份恢复
-            boolean capEmpty = true;
-            for (int i = 0; i < handler.getSlots(); i++) {
-                if (!handler.getStackInSlot(i).isEmpty()) {
-                    capEmpty = false;
-                    break;
-                }
-            }
-            if (capEmpty && !backup.isEmpty()) {
-                // 恢复备份
-                if (handler instanceof ItemStackHandler ish) {
-                    ish.deserializeNBT(tag.getCompound("GemBackupHandler"));
-                }
-            }
-        });
-    }
-    
-    /**
-     * 将宝石数据备份到 NBT (用于 Mohist 等混合服务端兼容)
-     */
-    private void backupGemsToNBT(ItemStack stack) {
-        if (stack.isEmpty()) return;
-        stack.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(handler -> {
-            if (handler instanceof ItemStackHandler ish) {
-                CompoundTag handlerTag = ish.serializeNBT();
-                stack.getOrCreateTag().put("GemBackupHandler", handlerTag);
-                
-                ListTag list = new ListTag();
-                for (int i = 0; i < handler.getSlots(); i++) {
-                    ItemStack gem = handler.getStackInSlot(i);
-                    if (!gem.isEmpty()) {
-                        CompoundTag gemTag = new CompoundTag();
-                        gemTag.putInt("Slot", i);
-                        gem.save(gemTag);
-                        list.add(gemTag);
-                    }
-                }
-                stack.getOrCreateTag().put("GemBackup", list);
-            }
-        });
-    }
     @Override
     public void removed(Player p_38940_) {
         super.removed(p_38940_);
         ItemStack stack = getItemStack();
+        if (!p_38940_.level().isClientSide) {
+            syncGemStorage(!stack.isEmpty() ? stack : lastStack);
+        }
         if (!stack.isEmpty()){
-            // 备份宝石数据到 NBT (Mohist 兼容)
-            backupGemsToNBT(stack);
+            // GamCap 自动同步到 NBT，无需手动备份
             p_38940_.getInventory().placeItemBackInInventory(stack);
         }
     }
@@ -182,10 +150,7 @@ public class GamSettingMenu extends AbstractContainerMenu {
                 itemstack10.shrink(1);
             } else if (slot == 36) {
                 // 主槽位（枪械/护甲）被点击
-                // 取出前先备份宝石数据
-                if (!getItemStack().isEmpty()) {
-                    backupGemsToNBT(getItemStack());
-                }
+                // GamCap 自动同步到 NBT，无需手动备份
                 super.clicked(slot, p_150401_, p_150402_, p_150403_);
             } else if (slot > 36) {
                 if (itemstack10.getItem()==ModItems.BreakGam.get()&&slot7.mayPlace(itemstack10)){
@@ -204,8 +169,7 @@ public class GamSettingMenu extends AbstractContainerMenu {
                 super.clicked(slot, p_150401_, p_150402_, p_150403_);
                 try {
                     GamHandler.applygam(getItemStack());
-                    // 每次修改宝石后备份到 NBT
-                    backupGemsToNBT(getItemStack());
+                    // GamCap 自动同步到 NBT，无需手动备份
                 } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
                     throw new RuntimeException(e);
                 }

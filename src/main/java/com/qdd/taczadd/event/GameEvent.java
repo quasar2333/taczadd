@@ -92,10 +92,9 @@ public class GameEvent {
     @SubscribeEvent
     public static void itemAttachCapabilities(AttachCapabilitiesEvent<ItemStack> event) {
         Item item = event.getObject().getItem();
-        if (item instanceof ArmorItem) {
-            event.addCapability(new ResourceLocation(Taczadd.MODID, "gam"), new GamCap());
-        } else if (item instanceof AbstractGunItem) {
-            event.addCapability(new ResourceLocation(Taczadd.MODID, "gam"), new GamCap());
+        if (item instanceof ArmorItem || item instanceof AbstractGunItem) {
+            // 传递 ItemStack 引用，使 GamCap 能够直接操作 NBT
+            event.addCapability(new ResourceLocation(Taczadd.MODID, "gam"), new GamCap(event.getObject()));
         }
     }
 

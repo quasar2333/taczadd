@@ -34,7 +34,8 @@ public class GamHandler {
     public static List<ItemStack> getGams(ItemStack stack){
         List<ItemStack> list = new ArrayList<>();
         if (stack.getItem() instanceof ArmorItem || stack.getItem() instanceof AbstractGunItem){
-            // 先尝试从 capability 获取
+            // 只从 capability 获取，不自动恢复 NBT 备份
+            // NBT 备份恢复只在 GUI 首次打开时进行，避免宝石被错误复制
             stack.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(gams-> {
                 for (int i=0;i<gams.getSlots();i++){
                     if (gams.getStackInSlot(i).isEmpty())continue;
@@ -42,25 +43,6 @@ public class GamHandler {
                     list.add(gam);
                 }
             });
-            
-            // 如果 capability 为空，尝试从 NBT 备份恢复 (Mohist 兼容)
-            if (list.isEmpty()) {
-                CompoundTag tag = stack.getOrCreateTag();
-                if (tag.contains("GemBackupHandler", 10)) {
-                    // 恢复 capability 数据
-                    stack.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(handler -> {
-                        if (handler instanceof ItemStackHandler ish) {
-                            ish.deserializeNBT(tag.getCompound("GemBackupHandler"));
-                            // 重新读取
-                            for (int i = 0; i < ish.getSlots(); i++) {
-                                if (!ish.getStackInSlot(i).isEmpty()) {
-                                    list.add(ish.getStackInSlot(i));
-                                }
-                            }
-                        }
-                    });
-                }
-            }
         }
         return list;
     }
