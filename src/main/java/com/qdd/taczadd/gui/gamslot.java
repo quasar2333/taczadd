@@ -16,25 +16,31 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 
 public class gamslot extends SlotItemHandler {
-    ItemStack stack;
+    private java.util.function.Supplier<ItemStack> stackSupplier;
     
-    public gamslot(IItemHandler itemHandler, int index, int xPosition, int yPosition,ItemStack stack) {
+    public gamslot(IItemHandler itemHandler, int index, int xPosition, int yPosition, java.util.function.Supplier<ItemStack> stackSupplier) {
         super(itemHandler, index, xPosition, yPosition);
-        this.stack=stack;
+        this.stackSupplier = stackSupplier;
     }
 
+    private ItemStack getEquipStack() {
+        return stackSupplier != null ? stackSupplier.get() : ItemStack.EMPTY;
+    }
+
+    @Deprecated
     public void setStack(ItemStack stack) {
-        this.stack = stack;
-        // GamCap 现在自动从 NBT 同步，不需要缓存
+        // 不再使用缓存引用，改用 Supplier 动态获取
     }
     @Override
     public boolean isHighlightable() {
+        ItemStack stack = getEquipStack();
         if (stack.isEmpty()) return false;
         int[] holes = stack.getOrCreateTag().getIntArray("gamholes");
         return isAllowedSlotForEquipOrHasItem() && holes.length > this.getSlotIndex() && holes[this.getSlotIndex()] != -1;
     }
 
     private boolean isAllowedSlotForEquipOrHasItem() {
+        ItemStack stack = getEquipStack();
         if (stack.isEmpty()) return false;
         if (stack.getItem() instanceof ArmorItem ai && ai.getEquipmentSlot().isArmor()) {
             boolean allowed;
@@ -56,6 +62,7 @@ public class gamslot extends SlotItemHandler {
     @Override
     public boolean mayPlace(@NotNull ItemStack gam){
         if (!isAllowedSlotForEquipOrHasItem()) return false;
+        ItemStack stack = getEquipStack();
         long gamnum=Arrays.stream(stack.getOrCreateTag().getIntArray("gamholes"))
                 .filter(num -> num == -1)
                 .count();
@@ -104,11 +111,11 @@ public class gamslot extends SlotItemHandler {
 
     @Override
     public IItemHandler getItemHandler(){
-        // GamCap 现在自动从 NBT 同步，每次获取都是最新数据
+        // 每次都动态获取当前物品的 capability，确保客户端/服务端一致
+        ItemStack stack = getEquipStack();
         if (stack.isEmpty()) {
             return super.getItemHandler();
         }
-        // 直接从 capability 获取，GamCap 会自动从 NBT 同步
         return stack.getCapability(ForgeCapabilities.ITEM_HANDLER)
                 .orElseGet(super::getItemHandler);
     }

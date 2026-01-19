@@ -89,11 +89,11 @@ public class GamSettingMenu extends AbstractContainerMenu {
                 GamSettingMenu.this.slotsChanged(this.container);
             }
         });
-        this.addSlot(new gamslot(ish, 0, 14, 8, getItemStack()));
-        this.addSlot(new gamslot(ish, 1, 74, 8, getItemStack()));
-        this.addSlot(new gamslot(ish, 2, 14, 42, getItemStack()));
-        this.addSlot(new gamslot(ish, 3, 74, 42, getItemStack()));
-        this.addSlot(new gamslot(ish, 4, 44, 61, getItemStack()));
+        this.addSlot(new gamslot(ish, 0, 14, 8, this::getItemStack));
+        this.addSlot(new gamslot(ish, 1, 74, 8, this::getItemStack));
+        this.addSlot(new gamslot(ish, 2, 14, 42, this::getItemStack));
+        this.addSlot(new gamslot(ish, 3, 74, 42, this::getItemStack));
+        this.addSlot(new gamslot(ish, 4, 44, 61, this::getItemStack));
         addDataSlots(data);
     }
 
@@ -112,11 +112,7 @@ public class GamSettingMenu extends AbstractContainerMenu {
                 syncGemStorage(stack);
             }
             lastStack = stack;
-            ((gamslot)this.slots.get(37)).setStack(stack);
-            ((gamslot)this.slots.get(38)).setStack(stack);
-            ((gamslot)this.slots.get(39)).setStack(stack);
-            ((gamslot)this.slots.get(40)).setStack(stack);
-            ((gamslot)this.slots.get(41)).setStack(stack);
+            // gamslot 现在通过 Supplier 动态获取 ItemStack，无需手动设置
         }
         this.broadcastChanges();
     }
@@ -148,10 +144,16 @@ public class GamSettingMenu extends AbstractContainerMenu {
                 itemstack9.getOrCreateTag().putBoolean("identify", true);
                 itemstack9.getOrCreateTag().putFloat("effect", ((GamItem)itemstack9.getItem()).randomEffect());
                 itemstack10.shrink(1);
+                this.broadcastChanges();
             } else if (slot == 36) {
                 // 主槽位（枪械/护甲）被点击
-                // GamCap 自动同步到 NBT，无需手动备份
+                ItemStack oldStack = getItemStack().copy();
                 super.clicked(slot, p_150401_, p_150402_, p_150403_);
+                // 如果物品变化，同步旧物品的宝石数据
+                if (!oldStack.isEmpty()) {
+                    syncGemStorage(oldStack);
+                }
+                this.broadcastChanges();
             } else if (slot > 36) {
                 if (itemstack10.getItem()==ModItems.BreakGam.get()&&slot7.mayPlace(itemstack10)){
                     ItemStack stack = getItemStack();
@@ -162,14 +164,20 @@ public class GamSettingMenu extends AbstractContainerMenu {
                             gamholes[idx] = idx;
                             stack.getOrCreateTag().putIntArray("gamholes", gamholes);
                             itemstack10.shrink(1);
+                            // 强制同步到客户端
+                            syncGemStorage(stack);
+                            this.broadcastChanges();
                         }
                     }
                     return;
                 }
                 super.clicked(slot, p_150401_, p_150402_, p_150403_);
                 try {
-                    GamHandler.applygam(getItemStack());
-                    // GamCap 自动同步到 NBT，无需手动备份
+                    ItemStack stack = getItemStack();
+                    GamHandler.applygam(stack);
+                    // 强制同步 NBT 和客户端
+                    syncGemStorage(stack);
+                    this.broadcastChanges();
                 } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
                     throw new RuntimeException(e);
                 }
