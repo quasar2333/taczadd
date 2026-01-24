@@ -13,34 +13,27 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.Arrays;
 
 public class gamslot extends SlotItemHandler {
-    private java.util.function.Supplier<ItemStack> stackSupplier;
+    ItemStack stack;
     
-    public gamslot(IItemHandler itemHandler, int index, int xPosition, int yPosition, java.util.function.Supplier<ItemStack> stackSupplier) {
+    public gamslot(IItemHandler itemHandler, int index, int xPosition, int yPosition,ItemStack stack) {
         super(itemHandler, index, xPosition, yPosition);
-        this.stackSupplier = stackSupplier;
+        this.stack=stack;
     }
 
-    private ItemStack getEquipStack() {
-        return stackSupplier != null ? stackSupplier.get() : ItemStack.EMPTY;
-    }
-
-    @Deprecated
     public void setStack(ItemStack stack) {
-        // 不再使用缓存引用，改用 Supplier 动态获取
+        this.stack = stack;
+        // GamCap 现在自动从 NBT 同步，不需要缓存
     }
     @Override
     public boolean isHighlightable() {
-        ItemStack stack = getEquipStack();
         if (stack.isEmpty()) return false;
         int[] holes = stack.getOrCreateTag().getIntArray("gamholes");
         return isAllowedSlotForEquipOrHasItem() && holes.length > this.getSlotIndex() && holes[this.getSlotIndex()] != -1;
     }
 
     private boolean isAllowedSlotForEquipOrHasItem() {
-        ItemStack stack = getEquipStack();
         if (stack.isEmpty()) return false;
         if (stack.getItem() instanceof ArmorItem ai && ai.getEquipmentSlot().isArmor()) {
             boolean allowed;
@@ -62,23 +55,33 @@ public class gamslot extends SlotItemHandler {
     @Override
     public boolean mayPlace(@NotNull ItemStack gam){
         if (!isAllowedSlotForEquipOrHasItem()) return false;
-        ItemStack stack = getEquipStack();
-        long gamnum=Arrays.stream(stack.getOrCreateTag().getIntArray("gamholes"))
-                .filter(num -> num == -1)
-                .count();
-        int num=0;
-        if(stack.getItem() instanceof ArmorItem ai &&ai.getEquipmentSlot().isArmor()){
-            if (ai.getEquipmentSlot()== EquipmentSlot.CHEST){
-                num=2;
-            }else {
-                num=3;
-                if (gam.getItem() instanceof GamItem gi&&gi.isBig()){return false;}
-            }
+        
+        // 解锁器逻辑：只要槽位是锁定的就可以解锁
+        if (gam.getItem() == ModItems.BreakGam.get()) {
+            // 检查槽位是否锁定（未解锁）
+            return !stack.isEmpty() && !isHighlightable();
         }
-        boolean b=gam.getItem()== ModItems.BreakGam.get() && !stack.isEmpty() && !isHighlightable()&& gamnum>num;
-        return (gam.getItem() instanceof GamItem gi &&gi.getType()==(stack.getItem() instanceof AbstractGunItem? GamItem.type.GUN: GamItem.type.ARMOR))
-                &&isHighlightable()&&gam.getOrCreateTag().getBoolean("identify")&&(!gi.isBig()&&this.getSlotIndex()!=4||gi.isBig()&&this.getSlotIndex()==4)
-                ||b;
+        
+        // 宝石放置逻辑
+        if (!(gam.getItem() instanceof GamItem gi)) return false;
+        
+        // 检查宝石类型是否匹配
+        GamItem.type requiredType = stack.getItem() instanceof AbstractGunItem ? GamItem.type.GUN : GamItem.type.ARMOR;
+        if (gi.getType() != requiredType) return false;
+        
+        // 检查槽位是否已解锁
+        if (!isHighlightable()) return false;
+        
+        // 检查宝石是否已鉴定
+        if (!gam.getOrCreateTag().getBoolean("identify")) return false;
+        
+        // 检查大宝石只能放在第5个槽位，普通宝石不能放在第5个槽位
+        int slotIdx = this.getSlotIndex();
+        if (gi.isBig()) {
+            return slotIdx == 4;
+        } else {
+            return slotIdx != 4;
+        }
     }
 
     @Override
@@ -111,11 +114,11 @@ public class gamslot extends SlotItemHandler {
 
     @Override
     public IItemHandler getItemHandler(){
-        // 每次都动态获取当前物品的 capability，确保客户端/服务端一致
-        ItemStack stack = getEquipStack();
+        // GamCap 现在自动从 NBT 同步，每次获取都是最新数据
         if (stack.isEmpty()) {
             return super.getItemHandler();
         }
+        // 直接从 capability 获取，GamCap 会自动从 NBT 同步
         return stack.getCapability(ForgeCapabilities.ITEM_HANDLER)
                 .orElseGet(super::getItemHandler);
     }
