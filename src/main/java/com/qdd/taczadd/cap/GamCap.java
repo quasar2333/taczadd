@@ -17,10 +17,13 @@ import org.jetbrains.annotations.Nullable;
  */
 public class GamCap implements ICapabilitySerializable<CompoundTag> {
     private static final String NBT_KEY = "GemStorage";
+    private static final String VERSION_KEY = "GemVersion";
     
     private final ItemStack owner;
     private final SyncedItemStackHandler gam;
     private final LazyOptional<IItemHandler> optional;
+    // 版本戳：用于避免刚写入的数据被旧NBT覆盖
+    private int localVersion = 0;
     
     public GamCap() {
         this(ItemStack.EMPTY);
@@ -28,7 +31,7 @@ public class GamCap implements ICapabilitySerializable<CompoundTag> {
     
     public GamCap(ItemStack owner) {
         this.owner = owner;
-        this.gam = new SyncedItemStackHandler(5, owner);
+        this.gam = new SyncedItemStackHandler(5);
         this.optional = LazyOptional.of(() -> this.gam);
     }
 
@@ -49,10 +52,16 @@ public class GamCap implements ICapabilitySerializable<CompoundTag> {
         CompoundTag tag = owner.getTag();
         if (tag != null && tag.contains(NBT_KEY)) {
             CompoundTag gemTag = tag.getCompound(NBT_KEY);
-            // 只有当 NBT 数据与当前不同时才同步，避免覆盖刚写入的数据
+            // 版本戳检查：如果NBT版本低于本地版本，跳过同步避免覆盖刚写入的数据
+            int nbtVersion = tag.getInt(VERSION_KEY);
+            if (nbtVersion < localVersion) {
+                return;
+            }
+            // 只有当 NBT 数据与当前不同时才同步
             CompoundTag currentTag = gam.serializeNBT();
             if (!gemTag.equals(currentTag)) {
                 gam.deserializeNBTSilent(gemTag);
+                localVersion = nbtVersion;
             }
         }
     }
@@ -62,7 +71,10 @@ public class GamCap implements ICapabilitySerializable<CompoundTag> {
      */
     public void syncToNBT() {
         if (owner.isEmpty()) return;
-        owner.getOrCreateTag().put(NBT_KEY, gam.serializeNBT());
+        localVersion++;
+        CompoundTag tag = owner.getOrCreateTag();
+        tag.put(NBT_KEY, gam.serializeNBT());
+        tag.putInt(VERSION_KEY, localVersion);
     }
 
     @Override
@@ -79,13 +91,11 @@ public class GamCap implements ICapabilitySerializable<CompoundTag> {
     /**
      * 自动同步到 NBT 的 ItemStackHandler
      */
-    private static class SyncedItemStackHandler extends ItemStackHandler {
-        private final ItemStack owner;
+    private class SyncedItemStackHandler extends ItemStackHandler {
         private boolean silent = false;
         
-        public SyncedItemStackHandler(int size, ItemStack owner) {
+        public SyncedItemStackHandler(int size) {
             super(size);
-            this.owner = owner;
         }
         
         @Override
@@ -97,9 +107,8 @@ public class GamCap implements ICapabilitySerializable<CompoundTag> {
         }
         
         private void saveToOwner() {
-            if (!owner.isEmpty()) {
-                owner.getOrCreateTag().put(NBT_KEY, this.serializeNBT());
-            }
+            // 使用外部类的syncToNBT以更新版本戳
+            syncToNBT();
         }
         
         /**
