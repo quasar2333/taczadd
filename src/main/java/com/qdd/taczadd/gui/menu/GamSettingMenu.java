@@ -14,35 +14,30 @@ import com.qdd.taczadd.handler.GamHandler;
 import com.qdd.taczadd.item.GamItem;
 import com.qdd.taczadd.item.ModItems;
 import com.tacz.guns.api.item.gun.AbstractGunItem;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.ItemStackHandler;
-
-import java.lang.reflect.InvocationTargetException;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class GamSettingMenu extends AbstractContainerMenu {
     private final ContainerData data;
     private final Container ItemSlots = new SimpleContainer(1);
     private final ItemStackHandler ish=new ItemStackHandler(5);
-    // 防止快速操作导致的竞态条件
-    private final AtomicBoolean isProcessing = new AtomicBoolean(false);
-    // 脏标记：标记数据是否需要在关闭时写回
-    private boolean isDirty = false;
 
     private int[] ensureGamholes(ItemStack stack) {
         if (stack.isEmpty()) {
             return new int[0];
         }
         int[] holes = stack.getOrCreateTag().getIntArray("gamholes");
-        // 只有当数组长度不是 5 时才需要完全重置
         if (holes.length == 5) {
-            // 规范化数组：只保留明确的解锁值(等于索引值)，其他都视为锁定
+            // 规范化：非法值修正
             boolean modified = false;
             for (int i = 0; i < 5; i++) {
-                // 只有当值等于索引时才视为已解锁，其他所有值都视为锁定
                 if (holes[i] != -1 && holes[i] != i) {
-                    holes[i] = -1;
-                    modified = true;
+                    if (holes[i] >= 0) {
+                        holes[i] = i;
+                        modified = true;
+                    } else {
+                        holes[i] = -1;
+                        modified = true;
+                    }
                 }
             }
             if (modified) {
@@ -50,7 +45,7 @@ public class GamSettingMenu extends AbstractContainerMenu {
             }
             return holes;
         }
-        // 所有槽位默认锁定，需要使用解锁器解锁
+        // 所有类型默认全部锁定，需要用 BreakGem 解锁
         int[] fixed = new int[]{-1, -1, -1, -1, -1};
         stack.getOrCreateTag().putIntArray("gamholes", fixed);
         return fixed;
@@ -94,61 +89,24 @@ public class GamSettingMenu extends AbstractContainerMenu {
     public void slotsChanged(Container container) {
         if (container==this.ItemSlots){
             ItemStack stack=getItemStack();
-            
             if (!stack.isEmpty()) {
                 ensureGamholes(stack);
-                // 从NBT恢复宝石数据到Capability
-                syncGemFromNBT(stack);
+                // GamCap 现在自动从 NBT 同步数据，不需要手动恢复
             }
-            
-            // 更新所有宝石槽位的引用（传递menu引用而非缓存stack）
-            for (int i = 37; i <= 41; i++) {
-                ((gamslot)this.slots.get(i)).setMenu(this);
-            }
+            ((gamslot)this.slots.get(37)).setStack(stack);
+            ((gamslot)this.slots.get(38)).setStack(stack);
+            ((gamslot)this.slots.get(39)).setStack(stack);
+            ((gamslot)this.slots.get(40)).setStack(stack);
+            ((gamslot)this.slots.get(41)).setStack(stack);
         }
         this.broadcastChanges();
-    }
-    
-    // 强制同步宝石数据到NBT
-    private void forceSyncGemData(ItemStack stack) {
-        if (stack.isEmpty()) return;
-        stack.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(handler -> {
-            net.minecraft.nbt.CompoundTag gemTag = new net.minecraft.nbt.CompoundTag();
-            net.minecraft.nbt.ListTag items = new net.minecraft.nbt.ListTag();
-            for (int i = 0; i < handler.getSlots(); i++) {
-                ItemStack gemStack = handler.getStackInSlot(i);
-                if (!gemStack.isEmpty()) {
-                    net.minecraft.nbt.CompoundTag itemTag = new net.minecraft.nbt.CompoundTag();
-                    itemTag.putByte("Slot", (byte) i);
-                    gemStack.save(itemTag);
-                    items.add(itemTag);
-                }
-            }
-            gemTag.put("Items", items);
-            gemTag.putInt("Size", handler.getSlots());
-            stack.getOrCreateTag().put("GemStorage", gemTag);
-        });
-    }
-    
-    // 从NBT同步宝石数据到Capability
-    private void syncGemFromNBT(ItemStack stack) {
-        if (stack.isEmpty()) return;
-        if (!stack.hasTag() || !stack.getTag().contains("GemStorage")) return;
-        // GamCap会在getCapability时自动从NBT同步，这里只需要触发一次获取
-        stack.getCapability(ForgeCapabilities.ITEM_HANDLER).ifPresent(handler -> {});
     }
     @Override
     public void removed(Player p_38940_) {
         super.removed(p_38940_);
         ItemStack stack = getItemStack();
         if (!stack.isEmpty()){
-            // 关闭界面前统一写回宝石数据（防抖：只在关闭时写回一次）
-            if (isDirty) {
-                forceSyncGemData(stack);
-                try {
-                    GamHandler.applygam(stack);
-                } catch (Exception ignored) {}
-            }
+            // GamCap 自动同步到 NBT，无需手动备份
             p_38940_.getInventory().placeItemBackInInventory(stack);
         }
     }
@@ -160,19 +118,6 @@ public class GamSettingMenu extends AbstractContainerMenu {
 
     @Override
     public void clicked(int slot, int p_150401_, ClickType p_150402_, Player p_150403_) {
-        // 防止快速操作导致的竞态条件
-        if (!isProcessing.compareAndSet(false, true)) {
-            return;
-        }
-        
-        try {
-            clickedInternal(slot, p_150401_, p_150402_, p_150403_);
-        } finally {
-            isProcessing.set(false);
-        }
-    }
-    
-    private void clickedInternal(int slot, int p_150401_, ClickType p_150402_, Player p_150403_) {
         if (slot != -1 && slot != -999 && slot < this.slots.size()) {
             Slot slot7 = this.slots.get(slot);
             ItemStack itemstack9 = slot7.getItem();
@@ -182,29 +127,32 @@ public class GamSettingMenu extends AbstractContainerMenu {
                 itemstack9.getOrCreateTag().putFloat("effect", ((GamItem)itemstack9.getItem()).randomEffect());
                 itemstack10.shrink(1);
             } else if (slot == 36) {
-                // 主槽位（枪械/护甲）被点击 - 标记为脏，延迟到关闭时写回
-                isDirty = true;
+                // 主槽位（枪械/护甲）被点击
                 super.clicked(slot, p_150401_, p_150402_, p_150403_);
             } else if (slot > 36) {
-                // 宝石槽位解锁逻辑
-                if (itemstack10.getItem()==ModItems.BreakGam.get()){
+                // 防止在没有武器/护甲时操作宝石槽，避免宝石丢失
+                if (getItemStack().isEmpty()) return;
+                if (itemstack10.getItem()==ModItems.BreakGam.get()&&slot7.mayPlace(itemstack10)){
                     ItemStack stack = getItemStack();
                     if (!stack.isEmpty()) {
                         int [] gamholes = ensureGamholes(stack);
                         int idx = slot7.getSlotIndex();
-                        // 检查槽位是否已锁定且可以解锁
-                        if (idx >= 0 && idx < gamholes.length && gamholes[idx] == -1) {
+                        if (idx >= 0 && idx < gamholes.length) {
                             gamholes[idx] = idx;
                             stack.getOrCreateTag().putIntArray("gamholes", gamholes);
                             itemstack10.shrink(1);
-                            this.broadcastChanges();
+                            // 通知客户端 gamholes 变化
+                            this.slotsChanged(this.ItemSlots);
                         }
                     }
                     return;
                 }
                 super.clicked(slot, p_150401_, p_150402_, p_150403_);
-                // 宝石槽位操作后标记为脏
-                isDirty = true;
+                try {
+                    GamHandler.applygam(getItemStack());
+                } catch (Exception e) {
+                    com.qdd.taczadd.Taczadd.LOGGER.error("宝石效果计算失败", e);
+                }
             } else {
                 super.clicked(slot, p_150401_, p_150402_, p_150403_);
             }

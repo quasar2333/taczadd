@@ -13,52 +13,30 @@ import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.SlotItemHandler;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Arrays;
 
 public class gamslot extends SlotItemHandler {
-    // 使用menu引用而非缓存stack，避免快速切换时数据滞后
-    private com.qdd.taczadd.gui.menu.GamSettingMenu menu;
-    @Deprecated
-    ItemStack stack; // 保留用于兼容，优先使用menu
+    ItemStack stack;
     
-    public gamslot(IItemHandler itemHandler, int index, int xPosition, int yPosition, ItemStack stack) {
+    public gamslot(IItemHandler itemHandler, int index, int xPosition, int yPosition,ItemStack stack) {
         super(itemHandler, index, xPosition, yPosition);
-        this.stack = stack;
+        this.stack=stack;
     }
 
-    public void setMenu(com.qdd.taczadd.gui.menu.GamSettingMenu menu) {
-        this.menu = menu;
-    }
-    
-    // 获取当前主槽位物品，优先从 menu 获取以避免缓存滞后
-    private ItemStack getOwnerStack() {
-        if (menu != null) {
-            return menu.getItemStack();
-        }
-        return stack != null ? stack : ItemStack.EMPTY;
-    }
-    
-    @Deprecated
     public void setStack(ItemStack stack) {
         this.stack = stack;
+        // GamCap 现在自动从 NBT 同步，不需要缓存
     }
-    // 解锁状态判断：只看gamholes，与装备部位限制解耦
-    public boolean isUnlocked() {
-        ItemStack ownerStack = getOwnerStack();
-        if (ownerStack.isEmpty()) return false;
-        int[] holes = ownerStack.getOrCreateTag().getIntArray("gamholes");
-        return holes.length > this.getSlotIndex() && holes[this.getSlotIndex()] != -1;
-    }
-    
     @Override
     public boolean isHighlightable() {
-        // 高亮显示需要同时满足：已解锁 且 允许放置
-        return isUnlocked() && isAllowedSlotForEquipOrHasItem();
+        if (stack.isEmpty()) return false;
+        int[] holes = stack.getOrCreateTag().getIntArray("gamholes");
+        return isAllowedSlotForEquipOrHasItem() && holes.length > this.getSlotIndex() && holes[this.getSlotIndex()] != -1;
     }
 
     private boolean isAllowedSlotForEquipOrHasItem() {
-        ItemStack ownerStack = getOwnerStack();
-        if (ownerStack.isEmpty()) return false;
-        if (ownerStack.getItem() instanceof ArmorItem ai && ai.getEquipmentSlot().isArmor()) {
+        if (stack.isEmpty()) return false;
+        if (stack.getItem() instanceof ArmorItem ai && ai.getEquipmentSlot().isArmor()) {
             boolean allowed;
             if (ai.getEquipmentSlot() == EquipmentSlot.CHEST) {
                 allowed = this.getSlotIndex() == 0 || this.getSlotIndex() == 1 || this.getSlotIndex() == 4;
@@ -77,37 +55,23 @@ public class gamslot extends SlotItemHandler {
 
     @Override
     public boolean mayPlace(@NotNull ItemStack gam){
-        ItemStack ownerStack = getOwnerStack();
-        if (ownerStack.isEmpty()) return false;
-        
-        // 解锁器逻辑：只要槽位未解锁就可以使用解锁器（与装备部位限制解耦）
-        if (gam.getItem() == ModItems.BreakGam.get()) {
-            return !isUnlocked();
-        }
-        
-        // 宝石放置需要检查装备部位限制
         if (!isAllowedSlotForEquipOrHasItem()) return false;
-        
-        // 宝石放置逻辑
-        if (!(gam.getItem() instanceof GamItem gi)) return false;
-        
-        // 检查宝石类型是否匹配
-        GamItem.type requiredType = ownerStack.getItem() instanceof AbstractGunItem ? GamItem.type.GUN : GamItem.type.ARMOR;
-        if (gi.getType() != requiredType) return false;
-        
-        // 检查槽位是否已解锁
-        if (!isUnlocked()) return false;
-        
-        // 检查宝石是否已鉴定
-        if (!gam.getOrCreateTag().getBoolean("identify")) return false;
-        
-        // 检查大宝石只能放在第5个槽位，普通宝石不能放在第5个槽位
-        int slotIdx = this.getSlotIndex();
-        if (gi.isBig()) {
-            return slotIdx == 4;
-        } else {
-            return slotIdx != 4;
+        long gamnum=Arrays.stream(stack.getOrCreateTag().getIntArray("gamholes"))
+                .filter(num -> num == -1)
+                .count();
+        int num=0;
+        if(stack.getItem() instanceof ArmorItem ai &&ai.getEquipmentSlot().isArmor()){
+            if (ai.getEquipmentSlot()== EquipmentSlot.CHEST){
+                num=2;
+            }else {
+                num=3;
+                if (gam.getItem() instanceof GamItem gi&&gi.isBig()){return false;}
+            }
         }
+        boolean b=gam.getItem()== ModItems.BreakGam.get() && !stack.isEmpty() && !isHighlightable()&& gamnum>num;
+        return (gam.getItem() instanceof GamItem gi &&gi.getType()==(stack.getItem() instanceof AbstractGunItem? GamItem.type.GUN: GamItem.type.ARMOR))
+                &&isHighlightable()&&gam.getOrCreateTag().getBoolean("identify")&&(!gi.isBig()&&this.getSlotIndex()!=4||gi.isBig()&&this.getSlotIndex()==4)
+                ||b;
     }
 
     @Override
@@ -117,6 +81,8 @@ public class gamslot extends SlotItemHandler {
 
     @Override
     public void set(@NotNull ItemStack stackIn) {
+        // 武器不在槽位时禁止写入，防止宝石丢失到本地 handler
+        if (stack.isEmpty()) return;
         IItemHandler handler = getItemHandler();
         if (handler instanceof IItemHandlerModifiable mod) {
             mod.setStackInSlot(getSlotIndex(), stackIn);
@@ -130,6 +96,8 @@ public class gamslot extends SlotItemHandler {
 
     @Override
     public @NotNull ItemStack remove(int amount) {
+        // 武器不在槽位时禁止操作
+        if (stack.isEmpty()) return ItemStack.EMPTY;
         IItemHandler handler = getItemHandler();
         ItemStack extracted = handler.extractItem(getSlotIndex(), amount, false);
         if (!extracted.isEmpty()) {
@@ -140,12 +108,12 @@ public class gamslot extends SlotItemHandler {
 
     @Override
     public IItemHandler getItemHandler(){
-        ItemStack ownerStack = getOwnerStack();
-        if (ownerStack.isEmpty()) {
+        // GamCap 现在自动从 NBT 同步，每次获取都是最新数据
+        if (stack.isEmpty()) {
             return super.getItemHandler();
         }
         // 直接从 capability 获取，GamCap 会自动从 NBT 同步
-        return ownerStack.getCapability(ForgeCapabilities.ITEM_HANDLER)
+        return stack.getCapability(ForgeCapabilities.ITEM_HANDLER)
                 .orElseGet(super::getItemHandler);
     }
     

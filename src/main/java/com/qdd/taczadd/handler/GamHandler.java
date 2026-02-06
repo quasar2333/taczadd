@@ -55,11 +55,11 @@ public class GamHandler {
 
         for (ItemStack stack1 : gams) {
             Item item = stack1.getItem();
+            if (!(item instanceof GamItem gi)) continue;
             boolean found = false;
 
-            // 检查是否已有同类GamItem
             for (Item existing : map.keySet()) {
-                if (((GamItem) item).getGamname().equals(((GamItem) existing).getGamname())) {
+                if (existing instanceof GamItem eg && gi.getGamname().equals(eg.getGamname())) {
                     map.put(existing, map.get(existing) + 1);
                     found = true;
                     break;
